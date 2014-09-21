@@ -9,7 +9,7 @@ public class SpriteManager {
 	public BufferedImage player;
 	
 	public SpriteManager(SpriteSheet ss) {
-		player = ss.crop(0, 0, Tile.TILE_HEIGHT, Tile.TILE_WIDTH);
+		player = ss.crop(0, 0, Tile.HEIGHT, Tile.WIDTH);
 		
 	}
 

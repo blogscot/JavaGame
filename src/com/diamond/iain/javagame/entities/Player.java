@@ -9,11 +9,11 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public class Player extends Tile {
 
-	private final int SPEED = 3;
+	private static final int SPEED = 3;
+	private static final int height = HEIGHT / Game.SCALE;
+	private static final int width = WIDTH * Game.SCALE / Game.SCALE;
 	//private int x, y;
 	private boolean up = false, down = false, right = false, left = false;
-	private int height = TILE_HEIGHT / Game.SCALE;
-	private int width = TILE_WIDTH * Game.SCALE / Game.SCALE;
 	private BufferedImage player;
 	
 	public Player(SpriteManager manager) {

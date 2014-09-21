@@ -15,10 +15,6 @@ import com.diamond.iain.javagame.gfx.KeyManager;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.gfx.SpriteSheet;
 
-// Game uses the Model View Controller Pattern
-// Game = Controller, Player = View, Model = SpriteManager
-// Thus, Player should not depend on SpriteManager
-
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
@@ -68,21 +64,18 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		
 		init();
-		long lastTime = System.nanoTime();
-		final double amountofTicks = 60;
-		double ns = 1000000000 / amountofTicks;
-		double delta = 0;
+		long sleepy = 18;
 		
 		while(running){
-			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
-			lastTime = now;
 			
-			if(delta >= 1){
-				tick();
-				delta--;
+			try {
+				Thread.sleep(sleepy);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			render();
+
+			tick();     // everybody move!
+			render();   // everybody draw!
 		}
 		stop();
 	}
@@ -103,10 +96,11 @@ public class Game extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 		
-		// draw game entities
+		// Let's draw the moving pieces
 		player.render(g);
 		
-		g.dispose();
+		
+		g.dispose();   // tidy up when your finished
 		bs.show();
 	}
 
