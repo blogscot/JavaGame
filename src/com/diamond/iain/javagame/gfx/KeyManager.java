@@ -13,14 +13,6 @@ public class KeyManager implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			player.setUp(true);
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			player.setDown(true);
-		}
-
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.setLeft(true);
 		}
@@ -33,14 +25,6 @@ public class KeyManager implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			player.setUp(false);
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			player.setDown(false);
-		}
 
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.setLeft(false);

@@ -3,50 +3,38 @@ package com.diamond.iain.javagame.entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 public class Player extends Tile {
 
 	private static final int SPEED = 3;
-	private static final int height = HEIGHT / Game.SCALE;
-	private static final int width = WIDTH * Game.SCALE / Game.SCALE;
+	private static final int height = TileHeight / SCALE;
+	private static final int width = TileWidth * SCALE / SCALE;
 	//private int x, y;
-	private boolean up = false, down = false, right = false, left = false;
+	private boolean right = false, left = false;
 	private BufferedImage player;
 	
 	public Player(SpriteManager manager) {
 		super(manager);
-		this.x = 0;
-		this.y = 0;
+		this.x = 30;
+		this.y = 260 * SCALE;
 		this.player = manager.player;
 
 	}
 
 	@Override
 	public void tick() {
-		if (up)
-			y -= SPEED;
-		if (down)
-			y += SPEED;
-		if (left)
+		if (left && x >= 0)
 			x -= SPEED;
-		if (right)
+		if (right && x <= ScreenWidth * SCALE - (TileWidth+5))
 			x += SPEED;
 	}
 
 	@Override
 	public void render(Graphics g) {
 			g.drawImage(player, x, y, height, width, null);
-	}
-
-	public void setUp(boolean up) {
-		this.up = up;
-	}
-
-	public void setDown(boolean down) {
-		this.down = down;
 	}
 
 	public void setRight(boolean right) {

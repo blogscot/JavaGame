@@ -2,7 +2,7 @@ package com.diamond.iain.javagame.gfx;
 
 import java.awt.image.BufferedImage;
 
-import com.diamond.iain.javagame.tiles.Tile;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 public class SpriteManager {
 	
@@ -14,11 +14,11 @@ public class SpriteManager {
 	
 	public SpriteManager(SpriteSheet ss) {
 		
-		alien1 = ss.crop(0, 0, Tile.HEIGHT, Tile.WIDTH);
-		alien2 = ss.crop(0, 1, Tile.HEIGHT, Tile.WIDTH);
-		alien3 = ss.crop(1, 0, Tile.HEIGHT, Tile.WIDTH);
-		alien4 = ss.crop(1, 1, Tile.HEIGHT, Tile.WIDTH);
-		player = ss.crop(2, 0, Tile.HEIGHT, Tile.WIDTH);
+		alien1 = ss.crop(0, 0, TileHeight, TileWidth);
+		alien2 = ss.crop(0, 1, TileHeight, TileWidth);
+		alien3 = ss.crop(1, 0, TileHeight, TileWidth);
+		alien4 = ss.crop(1, 1, TileHeight, TileWidth);
+		player = ss.crop(2, 0, TileHeight, TileWidth);
 		
 	}
 

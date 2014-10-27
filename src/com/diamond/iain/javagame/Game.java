@@ -14,11 +14,11 @@ import com.diamond.iain.javagame.gfx.ImageLoader;
 import com.diamond.iain.javagame.gfx.KeyManager;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.gfx.SpriteSheet;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 440, HEIGHT = 300, SCALE = 2;
 	public static boolean running = false;
 	public Thread gameThread;
 	
@@ -94,7 +94,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+		g.fillRect(0, 0, ScreenWidth * SCALE, ScreenHeight * SCALE);
 		
 		// Let's draw the moving pieces
 		player.render(g);
@@ -107,10 +107,10 @@ public class Game extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		
 		Game game = new Game();
-		game.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		game.setPreferredSize(new Dimension(ScreenWidth*SCALE, ScreenHeight*SCALE));
 
 		JFrame frame = new JFrame("Space Invaders");
-		frame.setSize(WIDTH*SCALE, HEIGHT*SCALE);
+		frame.setSize(ScreenWidth*SCALE, ScreenHeight*SCALE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.add(game);

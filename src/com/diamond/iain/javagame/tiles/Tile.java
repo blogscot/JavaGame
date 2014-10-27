@@ -6,8 +6,7 @@ import com.diamond.iain.javagame.gfx.SpriteManager;
 
 public abstract class Tile {
 	
-	public static final int HEIGHT = 36;
-	public static final int WIDTH = 20;
+
 	
 	protected SpriteManager manager;
 	protected int x, y;
