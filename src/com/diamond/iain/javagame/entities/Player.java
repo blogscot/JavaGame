@@ -11,17 +11,15 @@ public class Player extends Tile {
 
 	private static final int SPEED = 6;
 	private static final int height = TileHeight / SCALE;
-	private static final int width = TileWidth * SCALE / SCALE;
-	//private int x, y;
+	private static final int width = TileWidth;
 	private boolean right = false, left = false;
 	private BufferedImage player;
 	
 	public Player(SpriteManager manager) {
 		super(manager);
 		this.x = 30;
-		this.y = ScreenHeight * SCALE - 100;
+		this.y = playerYPos;
 		this.player = manager.player;
-
 	}
 
 	@Override

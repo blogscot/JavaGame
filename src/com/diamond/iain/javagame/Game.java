@@ -1,5 +1,9 @@
 package com.diamond.iain.javagame;
 
+import static com.diamond.iain.javagame.utils.GameConstants.SCALE;
+import static com.diamond.iain.javagame.utils.GameConstants.ScreenHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.ScreenWidth;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,12 +13,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import com.diamond.iain.javagame.entities.Invader;
 import com.diamond.iain.javagame.entities.Player;
 import com.diamond.iain.javagame.gfx.ImageLoader;
 import com.diamond.iain.javagame.gfx.KeyManager;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.gfx.SpriteSheet;
-import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 public class Game extends Canvas implements Runnable {
 
@@ -25,6 +29,7 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage spriteSheet;
 	
 	private static Player player;
+	private static Invader alien;
 	
 	public void init() {
 		ImageLoader loader = new ImageLoader();
@@ -38,7 +43,9 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		SpriteSheet ss = new SpriteSheet(spriteSheet);
+		
 		player = new Player(new SpriteManager(ss));
+		alien = new Invader(new SpriteManager(ss));
 		
 		this.addKeyListener(new KeyManager());
 	}
@@ -82,6 +89,8 @@ public class Game extends Canvas implements Runnable {
 
 	private void tick() {
 		player.tick();
+		alien.tick();
+		
 	}
 	
 	private void render() {
@@ -98,6 +107,7 @@ public class Game extends Canvas implements Runnable {
 		
 		// Let's draw the moving pieces
 		player.render(g);
+		alien.render(g);
 		
 		
 		g.dispose();   // tidy up when your finished

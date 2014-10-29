@@ -6,8 +6,6 @@ import com.diamond.iain.javagame.gfx.SpriteManager;
 
 public abstract class Tile {
 	
-
-	
 	protected SpriteManager manager;
 	protected int x, y;
 

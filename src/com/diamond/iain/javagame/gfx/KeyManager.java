@@ -20,6 +20,10 @@ public class KeyManager implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			player.setRight(true);
 		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			// fire a missile
+		}
 
 	}
 
