@@ -9,7 +9,7 @@ import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 public class Player extends Tile {
 
-	private static final int SPEED = 3;
+	private static final int SPEED = 6;
 	private static final int height = TileHeight / SCALE;
 	private static final int width = TileWidth * SCALE / SCALE;
 	//private int x, y;
@@ -19,7 +19,7 @@ public class Player extends Tile {
 	public Player(SpriteManager manager) {
 		super(manager);
 		this.x = 30;
-		this.y = 260 * SCALE;
+		this.y = ScreenHeight * SCALE - 100;
 		this.player = manager.player;
 
 	}
@@ -28,7 +28,7 @@ public class Player extends Tile {
 	public void tick() {
 		if (left && x >= 0)
 			x -= SPEED;
-		if (right && x <= ScreenWidth * SCALE - (TileWidth+5))
+		if (right && x <= ScreenWidth * SCALE - (TileWidth))
 			x += SPEED;
 	}
 
