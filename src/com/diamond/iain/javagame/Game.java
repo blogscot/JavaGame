@@ -43,9 +43,10 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		SpriteSheet ss = new SpriteSheet(spriteSheet);
+		SpriteManager manager = new SpriteManager(ss);
 		
-		player = new Player(new SpriteManager(ss));
-		alien = new Invader(new SpriteManager(ss));
+		player = new Player(manager);
+		alien = new Invader(manager);
 		
 		this.addKeyListener(new KeyManager());
 	}
@@ -90,7 +91,6 @@ public class Game extends Canvas implements Runnable {
 	private void tick() {
 		player.tick();
 		alien.tick();
-		
 	}
 	
 	private void render() {

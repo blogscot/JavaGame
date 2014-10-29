@@ -13,30 +13,21 @@ public class KeyManager implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			player.setLeft(true);
-		}
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) { player.setLeft(true); }
 
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			player.setRight(true);
-		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) { player.setRight(true);}
 		
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			// fire a missile
-		}
-
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) { player.firePressed(true); }
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			player.setLeft(false);
-		}
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) { player.setLeft(false); }
 
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			player.setRight(false);
-		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) { player.setRight(false); }
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) { player.firePressed(false); }
 	}
 
 	@Override

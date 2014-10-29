@@ -11,8 +11,6 @@ import com.diamond.iain.javagame.tiles.Tile;
 public class Invader extends Tile {
 	
 	private static int speed = 3;
-	private static final int height = TileHeight / SCALE;
-	private static final int width = TileWidth;
 	private BufferedImage alien;
 	
 	public Invader(SpriteManager manager){
@@ -24,18 +22,16 @@ public class Invader extends Tile {
 
 	@Override
 	public void tick() {
+		
+		// When invader reaches a wall reverse direction
 		if (x <= 0 || x >= (ScreenWidth * SCALE - TileWidth) ) {
 			speed *= -1;
 		}
-		
 		x += speed;
-		
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(alien, x, y, height, width, null);
-		
+		g.drawImage(alien, x, y, scaledHeight, scaledWidth, null);
 	}
-
 }
