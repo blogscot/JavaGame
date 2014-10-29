@@ -31,7 +31,6 @@ public class Missile extends Tile {
 	}
 	
 	public int getYpos() {
-		//System.out.println(x+","+y);
 		return y;
 	}
 
