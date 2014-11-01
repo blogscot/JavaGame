@@ -10,7 +10,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public class Invader implements Tile {
 	
-	private static int speed = 3;
+	private static int speed = 2;
 	private BufferedImage alien;
 	public int x = 0, y = 0;
 	

@@ -12,6 +12,6 @@ public interface GameConstants {
 	public static final int playerYPos = ScreenHeight * SCALE - 100;
 	public static final int missileYPos = playerYPos - TileHeight / 2;
 	
-	public static final int scaledHeight = TileHeight / 2;
-	public static final int scaledWidth = TileWidth / 2;
+	public static final int scaledHeight = TileHeight / SCALE;
+	public static final int scaledWidth = TileWidth / SCALE;
 }

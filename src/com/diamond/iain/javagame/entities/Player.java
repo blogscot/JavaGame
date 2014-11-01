@@ -1,10 +1,19 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.SCALE;
+import static com.diamond.iain.javagame.utils.GameConstants.ScreenWidth;
+import static com.diamond.iain.javagame.utils.GameConstants.TileHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.TileWidth;
+import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
@@ -17,6 +26,7 @@ public class Player implements Tile {
 	private boolean left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
+	Font f;
 
 	private ArrayList<Missile> missiles = new ArrayList<>();
 
@@ -25,6 +35,7 @@ public class Player implements Tile {
 		this.y = playerYPos;
 		this.player = manager.player;
 		this.manager = manager;
+		f = new Font("Dialog", Font.PLAIN, 24);
 	}
 
 	@Override
@@ -49,13 +60,23 @@ public class Player implements Tile {
 
 	@Override
 	public void render(Graphics g) {
+
+		g.setFont(f);
+		g.setColor(Color.white);
+		g.drawString("Player Score: 0", (ScreenWidth * 2) - 200, TileHeight);
 		g.drawImage(player, x, y, scaledHeight, scaledWidth, null);
-		
-		// render each missile if it is still on screen
-		for (Missile m : missiles) {
-			if (m.isActive())
-			{
+
+		// Note: use ListIterator to avoid ConcurrentModificationException
+		ListIterator<Missile> it = missiles.listIterator();
+
+		while (it.hasNext()) {
+			Missile m = it.next();
+			if (m.isActive()) {
+				// render each missile if it is still on screen
 				m.render(g);
+			} else {
+				// remove 'destroyed' missiles
+				it.remove();
 			}
 		}
 	}
@@ -69,8 +90,7 @@ public class Player implements Tile {
 	}
 
 	public void firePressed(boolean fire) {
-		if (fire) 
-		{
+		if (fire) {
 			// create new missile at player's x position
 			missiles.add(new Missile(manager, this.x));
 		}
