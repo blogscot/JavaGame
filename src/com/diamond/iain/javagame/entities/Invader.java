@@ -8,13 +8,13 @@ import java.awt.image.BufferedImage;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 
-public class Invader extends Tile {
+public class Invader implements Tile {
 	
 	private static int speed = 3;
 	private BufferedImage alien;
+	public int x = 0, y = 0;
 	
 	public Invader(SpriteManager manager){
-		super(manager);
 		this.x = 30;
 		this.y = 50;
 		this.alien = manager.alien1;

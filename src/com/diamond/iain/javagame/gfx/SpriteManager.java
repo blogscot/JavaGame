@@ -22,5 +22,4 @@ public class SpriteManager {
 		player = ss.crop(2, 0, TileWidth, TileHeight);
 		missile = ss.crop(2, 1, TileWidth, TileHeight);
 	}
-
 }

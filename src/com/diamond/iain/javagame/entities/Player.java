@@ -9,20 +9,22 @@ import java.util.ArrayList;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 
-public class Player extends Tile {
+public class Player implements Tile {
 
 	private static final int SPEED = 6;
+	public int x = 0, y = 0;
 	private boolean right = false;
 	private boolean left = false;
 	private BufferedImage player;
+	private SpriteManager manager;
 
 	private ArrayList<Missile> missiles = new ArrayList<>();
 
 	public Player(SpriteManager manager) {
-		super(manager);
 		this.x = 30;
 		this.y = playerYPos;
 		this.player = manager.player;
+		this.manager = manager;
 	}
 
 	@Override
