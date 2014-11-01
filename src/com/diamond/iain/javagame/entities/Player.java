@@ -26,7 +26,10 @@ public class Player implements Tile {
 	private boolean left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
+	private int Score = 0;
 	Font f;
+	
+	long lastPressed = System.currentTimeMillis();
 
 	private ArrayList<Missile> missiles = new ArrayList<>();
 
@@ -61,9 +64,9 @@ public class Player implements Tile {
 	@Override
 	public void render(Graphics g) {
 
-		g.setFont(f);
-		g.setColor(Color.white);
-		g.drawString("Player Score: 0", (ScreenWidth * 2) - 200, TileHeight);
+		updateScore(g);
+		
+		// draw Player
 		g.drawImage(player, x, y, scaledHeight, scaledWidth, null);
 
 		// Note: use ListIterator to avoid ConcurrentModificationException
@@ -81,6 +84,12 @@ public class Player implements Tile {
 		}
 	}
 
+	private void updateScore(Graphics g) {
+		g.setFont(f);
+		g.setColor(Color.white);
+		g.drawString("Player Score: "+Score, (ScreenWidth * 2) - 200, TileHeight);
+	}
+
 	public void setRight(boolean right) {
 		this.right = right;
 	}
@@ -90,9 +99,16 @@ public class Player implements Tile {
 	}
 
 	public void firePressed(boolean fire) {
-		if (fire) {
+		
+		long now = System.currentTimeMillis();
+		long duration = now - lastPressed;
+		
+		// Avoid the machine gun effect
+		if (fire && duration > 300 ) {
 			// create new missile at player's x position
 			missiles.add(new Missile(manager, this.x));
+			lastPressed = System.currentTimeMillis();
 		}
+		
 	}
 }

@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import com.diamond.iain.javagame.entities.Invader;
+import com.diamond.iain.javagame.entities.Martian;
 import com.diamond.iain.javagame.entities.Player;
 import com.diamond.iain.javagame.gfx.ImageLoader;
 import com.diamond.iain.javagame.gfx.KeyManager;
@@ -46,7 +47,7 @@ public class Game extends Canvas implements Runnable {
 		SpriteManager manager = new SpriteManager(ss);
 		
 		player = new Player(manager);
-		alien = new Invader(manager);
+		alien = new Martian(manager, 30, 50);
 		
 		this.addKeyListener(new KeyManager());
 	}
