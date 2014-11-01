@@ -22,10 +22,11 @@ public class Player implements Tile {
 
 	private static final int SPEED = 6;
 	public int x = 0, y = 0;
-	private boolean right = false;
-	private boolean left = false;
+	private boolean right = false, left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
+
+	// Scoring data
 	private int Score = 0;
 	Font f;
 	
@@ -109,6 +110,5 @@ public class Player implements Tile {
 			missiles.add(new Missile(manager, this.x));
 			lastPressed = System.currentTimeMillis();
 		}
-		
 	}
 }

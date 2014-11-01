@@ -13,10 +13,19 @@ public abstract class Invader implements Tile {
 	private static int speed = 2;
 	public int x = 0, y = 0;
 	
-	public Invader(){}
-
+	// Scoring data
+	int baseValue = 10;
+	
 	@Override
 	public void tick() {
+		
+		/*
+		 * I noticed that with 2 aliens, A and B, because they are drawn individually,
+		 * when they are moving towards the right wall A is incremented first with a 
+		 * +ve value. However if B has reached the wall its speed is reversed and a 
+		 * -ve value is applied. During the next loop they both move to the left, but
+		 * A and B have now moved closer together! 
+		 */
 		
 		// When invader reaches a wall reverse direction
 		if (x <= 0 || x >= (ScreenWidth * SCALE - TileWidth) ) {

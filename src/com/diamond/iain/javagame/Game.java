@@ -13,8 +13,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import com.diamond.iain.javagame.entities.Invader;
-import com.diamond.iain.javagame.entities.Martian;
+import com.diamond.iain.javagame.entities.Aliens;
 import com.diamond.iain.javagame.entities.Player;
 import com.diamond.iain.javagame.gfx.ImageLoader;
 import com.diamond.iain.javagame.gfx.KeyManager;
@@ -30,7 +29,7 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage spriteSheet;
 	
 	private static Player player;
-	private static Invader alien;
+	private static Aliens aliens;
 	
 	public void init() {
 		ImageLoader loader = new ImageLoader();
@@ -47,7 +46,7 @@ public class Game extends Canvas implements Runnable {
 		SpriteManager manager = new SpriteManager(ss);
 		
 		player = new Player(manager);
-		alien = new Martian(manager, 30, 50);
+		aliens = new Aliens(manager);
 		
 		this.addKeyListener(new KeyManager());
 	}
@@ -91,7 +90,7 @@ public class Game extends Canvas implements Runnable {
 
 	private void tick() {
 		player.tick();
-		alien.tick();
+		aliens.tick();
 	}
 	
 	private void render() {
@@ -108,7 +107,7 @@ public class Game extends Canvas implements Runnable {
 		
 		// Let's draw the moving pieces
 		player.render(g);
-		alien.render(g);
+		aliens.render(g);
 		
 		
 		g.dispose();   // tidy up when your finished
