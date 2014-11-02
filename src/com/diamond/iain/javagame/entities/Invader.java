@@ -10,7 +10,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
 	
-	private static int speed = 2;
+	private static int speed = 6;
 	public int x = 0, y = 0;
 	
 	// Scoring data
@@ -18,20 +18,23 @@ public abstract class Invader implements Tile {
 	
 	@Override
 	public void tick() {
-		
-		/*
-		 * I noticed that with 2 aliens, A and B, because they are drawn individually,
-		 * when they are moving towards the right wall A is incremented first with a 
-		 * +ve value. However if B has reached the wall its speed is reversed and a 
-		 * -ve value is applied. During the next loop they both move to the left, but
-		 * A and B have now moved closer together! 
-		 */
-		
-		// When invader reaches a wall reverse direction
-		if (x <= 0 || x >= (ScreenWidth * SCALE - TileWidth) ) {
+				
+		if (speed > 0 && x >= (ScreenWidth * SCALE - TileWidth / SCALE)) {
+			// When the end of the row sprite hits the right wall, all the previous sprites
+			// have already moved to right, so move the bouncing sprite to the right
+			// before changing direction.
+			x += speed;
 			speed *= -1;
+			
+		} else if (x <= 0) {
+			// When the start of the row sprite hits the left wall it is the first to
+			// move so just change direction and adjust position as normal.
+			speed *= -1;
+			x += speed;
+		} else {
+			// no walls!
+			x += speed;
 		}
-		x += speed;
 	}
 
 	@Override
