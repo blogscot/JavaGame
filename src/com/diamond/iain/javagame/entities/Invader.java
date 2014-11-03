@@ -10,7 +10,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
 	
-	private static int speed = 6;
+	private static int speed = 2;
 	public int x = 0, y = 0;
 	
 	// Scoring data
