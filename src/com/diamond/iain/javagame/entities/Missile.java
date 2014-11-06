@@ -12,8 +12,9 @@ public class Missile implements Tile {
 	
 	private static final int SPEED = 5;
 	public int x = 0, y = 0;
-	private boolean active = true;
 	private BufferedImage missile;
+
+	private boolean active = true;
 	
 	public Missile(SpriteManager manager, int startingX){
 		x = startingX;

@@ -9,6 +9,9 @@ public class GameConstants {
 
 	public static final int TileHeight = 40;
 	public static final int TileWidth = 60;
+
+	public static final int LeftWall = 0;
+	public static final int RightWall = ScreenWidth * SCALE - TileWidth / SCALE;
 	
 	public static final int playerYPos = getScreenHeight() * SCALE - 100;
 	public static final int missileYPos = playerYPos - TileHeight / SCALE;

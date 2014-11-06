@@ -25,6 +25,8 @@ public class Player implements Tile {
 	private boolean right = false, left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
+	
+	private boolean alive = true;
 
 	// Scoring data
 	private int Score = 0;
@@ -110,5 +112,15 @@ public class Player implements Tile {
 			missiles.add(new Missile(manager, this.x));
 			lastPressed = System.currentTimeMillis();
 		}
+	}
+
+	// returns false when the player is killed
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void die() {
+		alive = false;
+		
 	}
 }
