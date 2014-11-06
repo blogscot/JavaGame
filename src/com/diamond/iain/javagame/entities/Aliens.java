@@ -15,44 +15,25 @@ public class Aliens {
 	private Point anchor = new Point(30, 50);
 	private final int xSpacing = 45;
 	private final int ySpacing = 25;
+	private final int numOfInvaders = 11;
+	private final SpriteManager manager;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
 	boolean hitWall = false;
-	
+
+	enum InvaderType {
+		Martian, Plutonian, Mercurian, Venusian
+	}
+
 	public Aliens(SpriteManager manager) {
+		this.manager = manager;
 
 		// Build me an army
-
-		// Row 1
-		for(int i = 0; i < 11; i++){
-			invaders.add(new Martian(manager, anchor));
-			anchor.translate(xSpacing, 0);
-		}
-		
-		anchor.setLocation(new Point(30, 50+ySpacing));
-
-		// Row 2
-		for(int i = 0; i < 11; i++){
-			invaders.add(new Plutonian(manager, anchor));
-			anchor.translate(xSpacing, 0);
-		}
-		
-		anchor.setLocation(new Point(30, 50+ySpacing*2));
-
-		// Row 3
-		for(int i = 0; i < 11; i++){
-			invaders.add(new Mercurian(manager, anchor));
-			anchor.translate(xSpacing, 0);
-		}
-		
-		anchor.setLocation(new Point(30, 50+ySpacing*3));
-
-		// Row 4
-		for(int i = 0; i < 11; i++){
-			invaders.add(new Venusian(manager, anchor));
-			anchor.translate(xSpacing, 0);
-		}
+		addRow(InvaderType.Martian, 0);
+		addRow(InvaderType.Plutonian, 1);
+		addRow(InvaderType.Mercurian, 2);
+		addRow(InvaderType.Venusian, 3);
 	}
 
 	public void tick() {
@@ -76,22 +57,20 @@ public class Aliens {
 	}
 
 	public void render(Graphics g) {
-		
+
 		ArrayList<Missile> missiles = Player.getMissiles();
 		ListIterator<Invader> it = invaders.listIterator();
-		
+
 		// Collision detection
 		missiles.stream().forEach(missile -> {
 			invaders.stream().forEach(invader -> {
-				if (invader.getBounds().intersects(missile.getBounds())){
+				if (invader.getBounds().intersects(missile.getBounds())) {
 					invader.destroy();
 					missile.destroy();
 				}
 			});
 		});
-		
-		//invaders.stream().forEach(invader -> invader.render(g));
-		
+
 		while (it.hasNext()) {
 			Invader inv = it.next();
 			if (inv.isActive()) {
@@ -105,7 +84,39 @@ public class Aliens {
 	}
 
 	// TODO Returns false when all invaders are destroyed
-	public boolean isActive() {
-		return false;
+	public boolean isGameOver() {
+		// TODO Check is Player.getLives() is zero
+		return invaders.size() == 0;
+	}
+
+	/**
+	 * 
+	 * @param invader
+	 *            the invader type
+	 * @param row
+	 *            0..n the row number
+	 */
+	private void addRow(InvaderType invader, int row) {
+	
+		anchor.setLocation(new Point(30, 50 + ySpacing * row));
+	
+		for (int i = 0; i < numOfInvaders; i++) {
+	
+			switch (invader) {
+			case Martian:
+				invaders.add(new Martian(manager, anchor));
+				break;
+			case Plutonian:
+				invaders.add(new Plutonian(manager, anchor));
+				break;
+			case Mercurian:
+				invaders.add(new Mercurian(manager, anchor));
+				break;
+			case Venusian:
+				invaders.add(new Venusian(manager, anchor));
+				break;
+			}
+			anchor.translate(xSpacing, 0);
+		}
 	}
 }

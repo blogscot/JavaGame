@@ -47,6 +47,7 @@ public abstract class Invader implements Tile {
 		return new Point(x,y);
 	}
 	
+	// Make an invader a bit smaller to enforce accuracy in game play
 	@Override
 	public Rectangle getBounds(){
 		return new Rectangle(x+xOffset,y+yOffset, missileWidth, missileHeight);
