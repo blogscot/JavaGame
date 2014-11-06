@@ -20,8 +20,6 @@ public class Aliens {
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
-	boolean hitWall = false;
-
 	enum InvaderType {
 		Martian, Plutonian, Mercurian, Venusian
 	}
@@ -43,14 +41,9 @@ public class Aliens {
 			double pos = invader.getPosition().getX();
 			if (pos > RightWall || pos < LeftWall) {
 				invader.reverseDirection();
-				hitWall = true;
+				invaders.stream().forEach(Invader::moveDown);
 				break;
 			}
-		}
-
-		if (true == hitWall) {
-			hitWall = false;
-			invaders.stream().forEach(Invader::moveDown);
 		}
 
 		invaders.stream().forEach(Invader::tick);
@@ -71,6 +64,7 @@ public class Aliens {
 			});
 		});
 
+		// potentially resizing the collection so use iterators
 		while (it.hasNext()) {
 			Invader inv = it.next();
 			if (inv.isActive()) {
