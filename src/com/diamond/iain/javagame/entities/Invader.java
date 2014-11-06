@@ -4,6 +4,7 @@ import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 
 import com.diamond.iain.javagame.tiles.Tile;
 
@@ -12,6 +13,8 @@ public abstract class Invader implements Tile {
 	private static int speed = 2;
 	public int x = 0, y = 0;
 	public boolean isActive = true;
+	
+	protected BufferedImage alien;
 	
 	// Scoring data
 	int baseValue = 10;
@@ -23,6 +26,7 @@ public abstract class Invader implements Tile {
 
 	@Override
 	public void render(Graphics g) {
+		g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
 	}
 	
 	public void reverseDirection(){
