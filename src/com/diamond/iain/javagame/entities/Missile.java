@@ -1,8 +1,11 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.missileYPos;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
@@ -31,15 +34,18 @@ public class Missile implements Tile {
 	public void render(Graphics g) {
 		g.drawImage(missile, x, y, scaledHeight, scaledWidth, null);
 	}
-	
-	public int getYpos() {
-		return y;
+
+	@Override
+	public Point getPosition() {
+		return new Point(x,y);
 	}
 
+	@Override
 	public boolean isActive(){
 		return active;
 	}
 	
+	@Override
 	public void destroy() {
 		active = false;
 	}

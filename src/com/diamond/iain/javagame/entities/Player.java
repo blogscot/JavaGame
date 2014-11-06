@@ -11,6 +11,7 @@ import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -55,7 +56,7 @@ public class Player implements Tile {
 
 		// Move each missile if it is still on screen
 		for (Missile m : missiles) {
-			if (m.getYpos() > 0) {
+			if (m.getPosition().getY() > 0) {
 				m.tick();
 			} else {
 				// otherwise remove from list
@@ -114,13 +115,21 @@ public class Player implements Tile {
 		}
 	}
 
-	// returns false when the player is killed
-	public boolean isAlive() {
+	@Override
+	public Point getPosition() {
+		return new Point(x,y);
+	}
+
+	/**
+	 *  returns false when the player is killed
+	 */
+	@Override
+	public boolean isActive() {
 		return alive;
 	}
 
-	public void die() {
+	@Override
+	public void destroy() {
 		alive = false;
-		
 	}
 }

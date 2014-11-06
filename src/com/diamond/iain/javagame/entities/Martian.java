@@ -20,7 +20,6 @@ public class Martian extends Invader implements Tile {
 		this.alien = manager.martian;
 	}
 	
-	
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(alien, x, y, scaledHeight, scaledWidth, null);

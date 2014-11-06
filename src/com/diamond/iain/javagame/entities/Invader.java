@@ -25,10 +25,6 @@ public abstract class Invader implements Tile {
 	public void render(Graphics g) {
 	}
 	
-	public Point getPosition() {
-		return new Point(x,y);
-	}
-	
 	public void reverseDirection(){
 		speed *= -1;
 	}
@@ -36,12 +32,18 @@ public abstract class Invader implements Tile {
 	public void moveDown(){
 		y += TileHeight;
 	}
-	
-	public void destroy(){
-		isActive = false;
+
+	public Point getPosition() {
+		return new Point(x,y);
 	}
 
+	@Override
 	public boolean isActive(){
 		return isActive;
+	}
+
+	@Override
+	public void destroy(){
+		isActive = false;
 	}
 }

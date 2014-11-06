@@ -1,16 +1,16 @@
 package com.diamond.iain.javagame.entities;
 
+import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
+import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
-import com.diamond.iain.javagame.tiles.Tile;
-
-import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 
-public class Aliens implements Tile {
+public class Aliens {
 	
 	ArrayList<Invader> invaders = new ArrayList<>();
 	Point anchor = new Point(30,50);
@@ -38,7 +38,6 @@ public class Aliens implements Tile {
 		invaders.add(m2_2);
 	}
 	
-	@Override
 	public void tick() {
 		
 		// check if any invader has hit the left or right wall
@@ -53,7 +52,6 @@ public class Aliens implements Tile {
 		invaders.stream().forEach(Invader::tick);
 	}
 
-	@Override
 	public void render(Graphics g) {
 		invaders.stream().forEach(invader -> invader.render(g));
 	}
