@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -22,7 +23,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 public class Player implements Tile {
 
 	private static final int SPEED = 6;
-	public int x = 0, y = 0;
+	private int x = 0, y = 0;
 	private boolean right = false, left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
@@ -35,7 +36,7 @@ public class Player implements Tile {
 	
 	long lastPressed = System.currentTimeMillis();
 
-	private ArrayList<Missile> missiles = new ArrayList<>();
+	private static ArrayList<Missile> missiles = new ArrayList<>();
 
 	public Player(SpriteManager manager) {
 		this.x = 30;
@@ -71,7 +72,7 @@ public class Player implements Tile {
 		updateScore(g);
 		
 		// draw Player
-		g.drawImage(player, x, y, scaledHeight, scaledWidth, null);
+		g.drawImage(player, x, y, scaledWidth, scaledHeight, null);
 
 		// Note: use ListIterator to avoid ConcurrentModificationException
 		ListIterator<Missile> it = missiles.listIterator();
@@ -118,6 +119,15 @@ public class Player implements Tile {
 	@Override
 	public Point getPosition() {
 		return new Point(x,y);
+	}
+	
+	@Override
+	public Rectangle getBounds(){
+		return new Rectangle(x,y, TileWidth, TileHeight);
+	}
+	
+	public static ArrayList<Missile> getMissiles(){
+		return missiles;
 	}
 
 	/**

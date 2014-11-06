@@ -6,37 +6,53 @@ import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
 
 public class Aliens {
 
-	ArrayList<Invader> invaders = new ArrayList<>();
-	Point anchor = new Point(30, 50);
-	private final int xSpacing = 35;
-	private final int ySpacing = 85;
+	private Point anchor = new Point(30, 50);
+	private final int xSpacing = 45;
+	private final int ySpacing = 25;
+
+	private ArrayList<Invader> invaders = new ArrayList<>();
 
 	boolean hitWall = false;
-
+	
 	public Aliens(SpriteManager manager) {
 
 		// Build me an army
 
 		// Row 1
-		Invader m1_1 = new Martian(manager, anchor);
-		anchor.translate(xSpacing, 0);
-		Invader m1_2 = new Martian(manager, anchor);
+		for(int i = 0; i < 11; i++){
+			invaders.add(new Martian(manager, anchor));
+			anchor.translate(xSpacing, 0);
+		}
+		
+		anchor.setLocation(new Point(30, 50+ySpacing));
 
-		// new Row 2
-		anchor.move(30, ySpacing);
-		Invader m2_1 = new Plutonian(manager, anchor);
-		anchor.translate(xSpacing, 0);
-		Invader m2_2 = new Plutonian(manager, anchor);
+		// Row 2
+		for(int i = 0; i < 11; i++){
+			invaders.add(new Plutonian(manager, anchor));
+			anchor.translate(xSpacing, 0);
+		}
+		
+		anchor.setLocation(new Point(30, 50+ySpacing*2));
 
-		invaders.add(m1_1);
-		invaders.add(m1_2);
-		invaders.add(m2_1);
-		invaders.add(m2_2);
+		// Row 3
+		for(int i = 0; i < 11; i++){
+			invaders.add(new Mercurian(manager, anchor));
+			anchor.translate(xSpacing, 0);
+		}
+		
+		anchor.setLocation(new Point(30, 50+ySpacing*3));
+
+		// Row 4
+		for(int i = 0; i < 11; i++){
+			invaders.add(new Venusian(manager, anchor));
+			anchor.translate(xSpacing, 0);
+		}
 	}
 
 	public void tick() {
@@ -60,7 +76,32 @@ public class Aliens {
 	}
 
 	public void render(Graphics g) {
-		invaders.stream().forEach(invader -> invader.render(g));
+		
+		ArrayList<Missile> missiles = Player.getMissiles();
+		ListIterator<Invader> it = invaders.listIterator();
+		
+		// Collision detection
+		missiles.stream().forEach(missile -> {
+			invaders.stream().forEach(invader -> {
+				if (invader.getBounds().intersects(missile.getBounds())){
+					invader.destroy();
+					missile.destroy();
+				}
+			});
+		});
+		
+		//invaders.stream().forEach(invader -> invader.render(g));
+		
+		while (it.hasNext()) {
+			Invader inv = it.next();
+			if (inv.isActive()) {
+				// render each invader if it is still on screen
+				inv.render(g);
+			} else {
+				// remove 'destroyed' invaders
+				it.remove();
+			}
+		}
 	}
 
 	// TODO Returns false when all invaders are destroyed

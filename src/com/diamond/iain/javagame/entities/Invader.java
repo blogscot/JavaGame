@@ -4,6 +4,7 @@ import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.diamond.iain.javagame.tiles.Tile;
@@ -11,10 +12,15 @@ import com.diamond.iain.javagame.tiles.Tile;
 public abstract class Invader implements Tile {
 	
 	private static int speed = 2;
-	public int x = 0, y = 0;
-	public boolean isActive = true;
+	protected int x = 0, y = 0;
+	protected boolean isActive = true;
 	
 	protected BufferedImage alien;
+	
+	private final int xOffset = 10;
+	private final int yOffset = 5;
+	private final int missileWidth = TileWidth-20;
+	private final int missileHeight = TileHeight-10;
 	
 	// Scoring data
 	int baseValue = 10;
@@ -39,6 +45,11 @@ public abstract class Invader implements Tile {
 
 	public Point getPosition() {
 		return new Point(x,y);
+	}
+	
+	@Override
+	public Rectangle getBounds(){
+		return new Rectangle(x+xOffset,y+yOffset, missileWidth, missileHeight);
 	}
 
 	@Override
