@@ -29,9 +29,9 @@ public class Aliens {
 
 		// new Row 2
 		anchor.move(30, ySpacing);
-		Invader m2_1 = new Martian(manager, anchor);
+		Invader m2_1 = new Plutonian(manager, anchor);
 		anchor.translate(xSpacing, 0);
-		Invader m2_2 = new Martian(manager, anchor);
+		Invader m2_2 = new Plutonian(manager, anchor);
 
 		invaders.add(m1_1);
 		invaders.add(m1_2);
