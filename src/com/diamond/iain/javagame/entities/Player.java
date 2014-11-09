@@ -21,20 +21,20 @@ public class Player implements Tile {
 	private boolean right = false, left = false;
 	private BufferedImage player;
 	private SpriteManager manager;
-	
-	//private static boolean alive = true;
+
+	// private static boolean alive = true;
 	private static int level = 1;
 	private static int lives = 3;
 
 	// Scoring data
 	private static int totalScore = 0;
 	private static int highScore = 0;
-	
+
 	Font f;
 	Point scorePosition = new Point(20, 20);
-	Point levelPosition = new Point(getScreenHeight(), 20);
-	Point highScorePosition = new Point(ScreenWidth*SCALE - 200 , 20);
-	
+	Point levelPosition = new Point(ScreenWidth, 20);
+	Point highScorePosition = new Point(ScreenWidth * SCALE - 200, 20);
+
 	long lastPressed = System.currentTimeMillis();
 
 	private static ArrayList<Missile> missiles = new ArrayList<>();
@@ -51,10 +51,13 @@ public class Player implements Tile {
 	public void tick() {
 
 		// Move Player
-		if (left && x >= 0)
+		if (left && x >= LeftWall) {
 			x -= SPEED;
-		if (right && x <= ScreenWidth * SCALE - (TileWidth))
+		}
+		
+		if (right && x + SPEED <= RightWall) {
 			x += SPEED;
+		}
 
 		// Move each missile if it is still on screen
 		for (Missile m : missiles) {
@@ -71,7 +74,7 @@ public class Player implements Tile {
 	public void render(Graphics g) {
 
 		updateScore(g);
-		
+
 		// draw Player
 		g.drawImage(player, x, y, scaledWidth, scaledHeight, null);
 
@@ -90,33 +93,34 @@ public class Player implements Tile {
 		}
 	}
 
-	
-	public static void restartGame(){
-		if (totalScore > highScore){
+	public static void restartGame() {
+		if (totalScore > highScore) {
 			highScore = totalScore;
 		}
 		totalScore = 0;
 	}
-	
+
 	/**
 	 * Adds points to the players current score
 	 * 
-	 * @param score 
+	 * @param score
 	 */
 	public static void addScore(int score) {
 		totalScore += score;
 	}
-	
-	public static void levelUp(){
+
+	public static void levelUp() {
 		level += 1;
 	}
 
 	private void updateScore(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
-		g.drawString("Player Score: "+ totalScore, scorePosition.x, scorePosition.y);
-		g.drawString("Level "+ level, levelPosition.x, levelPosition.y);
-		g.drawString("High Score: "+ highScore, highScorePosition.x, highScorePosition.y);
+		g.drawString("Player Score: " + totalScore, scorePosition.x,
+				scorePosition.y);
+		g.drawString("Level " + level, levelPosition.x, levelPosition.y);
+		g.drawString("High Score: " + highScore, highScorePosition.x,
+				highScorePosition.y);
 	}
 
 	public void setRight(boolean right) {
@@ -128,10 +132,10 @@ public class Player implements Tile {
 	}
 
 	public void firePressed(boolean fire) {
-		
+
 		long now = System.currentTimeMillis();
 		long duration = now - lastPressed;
-		
+
 		// Avoid the machine gun effect
 		if (fire && duration > 300) {
 			// create new missile at player's x position
@@ -142,15 +146,15 @@ public class Player implements Tile {
 
 	@Override
 	public Point getPosition() {
-		return new Point(x,y);
+		return new Point(x, y);
 	}
-	
+
 	@Override
-	public Rectangle getBounds(){
-		return new Rectangle(x,y, TileWidth, TileHeight);
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, TileWidth, TileHeight);
 	}
-	
-	public static ArrayList<Missile> getMissiles(){
+
+	public static ArrayList<Missile> getMissiles() {
 		return missiles;
 	}
 
@@ -163,7 +167,7 @@ public class Player implements Tile {
 	public static boolean isAlive() {
 		return lives > 0;
 	}
-	
+
 	@Override
 	public void destroy() {
 		lives -= 1;
