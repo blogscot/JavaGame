@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
+import com.diamond.iain.javagame.utils.OSValidator;
 
 public class Aliens {
 
@@ -20,7 +21,7 @@ public class Aliens {
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
 
-	Point GameOverPosition = new Point(360, 400);
+	Point GameOverPosition;
 	Font f = new Font("Dialog", Font.PLAIN, 32);
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
@@ -39,6 +40,14 @@ public class Aliens {
 		this.manager = manager;
 
 		buildInvaderArmy();
+
+		// Let's tweak the text position depending on host machine
+		if (OSValidator.isMac()) {
+			GameOverPosition = new Point(560, 400);
+		} else {
+			GameOverPosition = new Point(360, 400);
+		}
+		
 	}
 
 	public void tick() {
@@ -128,7 +137,7 @@ public class Aliens {
 	private void displayGameOver(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
-		g.drawString("Game Over. Press Space to restart.", GameOverPosition.x,
+		g.drawString("Game Over. Press 'S' to restart.", GameOverPosition.x,
 				GameOverPosition.y);
 	}
 
