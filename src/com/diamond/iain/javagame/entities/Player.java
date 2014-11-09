@@ -97,6 +97,7 @@ public class Player implements Tile {
 		if (totalScore > highScore) {
 			highScore = totalScore;
 		}
+		level = 1;
 		totalScore = 0;
 	}
 
