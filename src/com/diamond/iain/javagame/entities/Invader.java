@@ -42,7 +42,8 @@ public abstract class Invader implements Tile {
 	 * Make the invaders faster
 	 */
 	public static void levelUp(){
-		speed += 1;
+		// speed can be negative so be wary when adding
+		speed = Math.abs(speed)+1;
 	}
 	public void moveDown(){
 		y += TileHeight;
