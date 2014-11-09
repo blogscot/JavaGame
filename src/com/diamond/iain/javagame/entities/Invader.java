@@ -23,7 +23,7 @@ public abstract class Invader implements Tile {
 	private final int missileHeight = TileHeight-10;
 	
 	// Scoring data
-	int baseValue = 10;
+	int score = 0;
 	
 	@Override
 	public void tick() {
@@ -43,6 +43,10 @@ public abstract class Invader implements Tile {
 		y += TileHeight;
 	}
 
+	public int getScore() {
+		return score;
+	}
+	
 	public Point getPosition() {
 		return new Point(x,y);
 	}

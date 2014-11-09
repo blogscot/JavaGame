@@ -31,8 +31,12 @@ public class Player implements Tile {
 	private boolean alive = true;
 
 	// Scoring data
-	private int Score = 0;
+	private static int totalScore = 0;
+	private static int highScore = 0;
+	
 	Font f;
+	Point scorePosition = new Point(20, 20);
+	Point highScorePosition = new Point(ScreenWidth*2 - 200 , 20);
 	
 	long lastPressed = System.currentTimeMillis();
 
@@ -43,7 +47,7 @@ public class Player implements Tile {
 		this.y = playerYPos;
 		this.player = manager.player;
 		this.manager = manager;
-		f = new Font("Dialog", Font.PLAIN, 24);
+		f = new Font("Dialog", Font.PLAIN, 18);
 	}
 
 	@Override
@@ -89,10 +93,20 @@ public class Player implements Tile {
 		}
 	}
 
+	/**
+	 * Adds points to the players current score
+	 * 
+	 * @param score 
+	 */
+	public static void addScore(int score) {
+		totalScore += score;
+	}
+
 	private void updateScore(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
-		g.drawString("Player Score: "+Score, (ScreenWidth * 2) - 200, TileHeight);
+		g.drawString("Player Score: "+ totalScore, scorePosition.x, scorePosition.y);
+		g.drawString("High Score: "+ highScore, highScorePosition.x, highScorePosition.y);
 	}
 
 	public void setRight(boolean right) {

@@ -11,5 +11,7 @@ public class Mercurian extends Invader implements Tile {
 		x = p.x;
 		y = p.y;
 		this.alien = manager.mercurian;
+		
+		score = 20;
 	}
 }

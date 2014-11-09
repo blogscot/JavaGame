@@ -58,6 +58,7 @@ public class Aliens {
 		missiles.stream().forEach(missile -> {
 			invaders.stream().forEach(invader -> {
 				if (invader.getBounds().intersects(missile.getBounds())) {
+					Player.addScore(invader.getScore());
 					invader.destroy();
 					missile.destroy();
 				}

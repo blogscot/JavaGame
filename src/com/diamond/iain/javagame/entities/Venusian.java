@@ -11,5 +11,7 @@ public class Venusian extends Invader implements Tile {
 		x = p.x;
 		y = p.y;
 		this.alien = manager.venusian;
+		
+		score = 10;
 	}
 }

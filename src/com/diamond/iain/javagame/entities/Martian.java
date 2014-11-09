@@ -11,5 +11,7 @@ public class Martian extends Invader implements Tile {
 		x = p.x;
 		y = p.y;
 		this.alien = manager.martian;
+		
+		score = 40;
 	}
 }

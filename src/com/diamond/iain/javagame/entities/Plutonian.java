@@ -11,5 +11,7 @@ public class Plutonian extends Invader implements Tile {
 		x = p.x;
 		y = p.y;
 		this.alien = manager.plutonian;
+		
+		score = 30;
 	}
 }
