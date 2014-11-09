@@ -19,6 +19,13 @@ public class GameConstants {
 	public static final int scaledHeight = TileHeight / SCALE;
 	public static final int scaledWidth = TileWidth / SCALE;
 
+	/**
+	 *  This is a convenience method so the game can be run on two
+	 *  different screen sizes, without having to constantly tweak
+	 *  these constants.
+	 *  
+	 * @return the Screen Height
+	 */
 	public static int getScreenHeight(){
 		if (OSValidator.isMac()){
 			return MacScreenHeight;

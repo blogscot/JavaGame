@@ -27,14 +27,16 @@ public class Aliens {
 	public Aliens(SpriteManager manager) {
 		this.manager = manager;
 
-		// Build me an army
-		addRow(InvaderType.Martian, 0);
-		addRow(InvaderType.Plutonian, 1);
-		addRow(InvaderType.Mercurian, 2);
-		addRow(InvaderType.Venusian, 3);
+		buildInvaderArmy();
 	}
 
 	public void tick() {
+		
+		if(isArmyDefeated()){
+			Invader.levelUp();
+			Player.levelUp();
+			buildInvaderArmy();
+		}
 
 		// check if any invader has hit the left or right wall
 		for (Invader invader : invaders) {
@@ -78,9 +80,11 @@ public class Aliens {
 		}
 	}
 
-	// TODO Returns false when all invaders are destroyed
-	public boolean isGameOver() {
-		// TODO Check is Player.getLives() is zero
+	/**
+	 * 
+	 * @return 	false when all invaders are destroyed
+	 */
+	public boolean isArmyDefeated() {
 		return invaders.size() == 0;
 	}
 
@@ -113,5 +117,15 @@ public class Aliens {
 			}
 			anchor.translate(xSpacing, 0);
 		}
+	}
+
+	/**
+	 *  Build a new army
+	 */
+	private void buildInvaderArmy() {
+		addRow(InvaderType.Martian, 0);
+		addRow(InvaderType.Plutonian, 1);
+		addRow(InvaderType.Mercurian, 2);
+		addRow(InvaderType.Venusian, 3);
 	}
 }

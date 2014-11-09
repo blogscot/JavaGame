@@ -1,12 +1,6 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.SCALE;
-import static com.diamond.iain.javagame.utils.GameConstants.ScreenWidth;
-import static com.diamond.iain.javagame.utils.GameConstants.TileHeight;
-import static com.diamond.iain.javagame.utils.GameConstants.TileWidth;
-import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,6 +23,8 @@ public class Player implements Tile {
 	private SpriteManager manager;
 	
 	private boolean alive = true;
+	private static int level = 1;
+	private static int lives = 3;
 
 	// Scoring data
 	private static int totalScore = 0;
@@ -36,7 +32,8 @@ public class Player implements Tile {
 	
 	Font f;
 	Point scorePosition = new Point(20, 20);
-	Point highScorePosition = new Point(ScreenWidth*2 - 200 , 20);
+	Point levelPosition = new Point(getScreenHeight(), 20);
+	Point highScorePosition = new Point(ScreenWidth*SCALE - 200 , 20);
 	
 	long lastPressed = System.currentTimeMillis();
 
@@ -101,11 +98,16 @@ public class Player implements Tile {
 	public static void addScore(int score) {
 		totalScore += score;
 	}
+	
+	public static void levelUp(){
+		level += 1;
+	}
 
 	private void updateScore(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
 		g.drawString("Player Score: "+ totalScore, scorePosition.x, scorePosition.y);
+		g.drawString("Level "+ level, levelPosition.x, levelPosition.y);
 		g.drawString("High Score: "+ highScore, highScorePosition.x, highScorePosition.y);
 	}
 

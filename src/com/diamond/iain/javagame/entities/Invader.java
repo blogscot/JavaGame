@@ -22,8 +22,7 @@ public abstract class Invader implements Tile {
 	private final int missileWidth = TileWidth-20;
 	private final int missileHeight = TileHeight-10;
 	
-	// Scoring data
-	int score = 0;
+	protected int score = 0;
 	
 	@Override
 	public void tick() {
@@ -39,6 +38,12 @@ public abstract class Invader implements Tile {
 		speed *= -1;
 	}
 	
+	/**
+	 * Make the invaders faster
+	 */
+	public static void levelUp(){
+		speed += 1;
+	}
 	public void moveDown(){
 		y += TileHeight;
 	}
