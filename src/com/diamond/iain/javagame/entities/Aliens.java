@@ -3,6 +3,8 @@ package com.diamond.iain.javagame.entities;
 import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
 import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -18,7 +20,16 @@ public class Aliens {
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
 
+	Point GameOverPosition = new Point(360, 400);
+	Font f = new Font("Dialog", Font.PLAIN, 32);
+
 	private ArrayList<Invader> invaders = new ArrayList<>();
+
+	enum GameState {
+		Active, Over
+	}
+
+	private static GameState gameState = GameState.Active;
 
 	enum InvaderType {
 		Martian, Plutonian, Mercurian, Venusian
@@ -31,27 +42,43 @@ public class Aliens {
 	}
 
 	public void tick() {
-		
-		if(isArmyDefeated()){
-			Invader.levelUp();
-			Player.levelUp();
-			buildInvaderArmy();
-		}
 
-		// check if any invader has hit the left or right wall
-		for (Invader invader : invaders) {
-			double pos = invader.getPosition().getX();
-			if (pos > RightWall || pos < LeftWall) {
-				invader.reverseDirection();
-				invaders.stream().forEach(Invader::moveDown);
-				break;
+		// is Game Over?
+		invaders.stream().forEach(invader -> {
+			if (invader.reachedPlayer()) {
+				gameState = GameState.Over;
+				return;
 			}
-		}
+		});
 
-		invaders.stream().forEach(Invader::tick);
+		if (gameState != GameState.Over) {
+
+			if (isArmyDefeated()) {
+				Invader.levelUp();
+				Player.levelUp();
+				buildInvaderArmy();
+			}
+
+			// check if any invader has hit the left or right wall
+			for (Invader invader : invaders) {
+				double pos = invader.getPosition().getX();
+				if (pos > RightWall || pos < LeftWall) {
+					invader.reverseDirection();
+					invaders.stream().forEach(Invader::moveDown);
+					break;
+				}
+			}
+
+			invaders.stream().forEach(Invader::tick);
+		}
 	}
 
 	public void render(Graphics g) {
+
+		if (gameState == GameState.Over) {
+			displayGameOver(g);
+			return;
+		}
 
 		ArrayList<Missile> missiles = Player.getMissiles();
 		ListIterator<Invader> it = invaders.listIterator();
@@ -80,12 +107,39 @@ public class Aliens {
 		}
 	}
 
+	public void restartGame(boolean restart) {
+		if (gameState == GameState.Over && restart == true) {
+			gameState = GameState.Active;
+			invaders.clear();
+			Invader.restartGame();
+			Player.restartGame();
+			buildInvaderArmy();
+		}
+	}
+
 	/**
 	 * 
-	 * @return 	false when all invaders are destroyed
+	 * @return false when all invaders are destroyed
 	 */
 	public boolean isArmyDefeated() {
 		return invaders.size() == 0;
+	}
+
+	private void displayGameOver(Graphics g) {
+		g.setFont(f);
+		g.setColor(Color.white);
+		g.drawString("Game Over. Press Space to restart.", GameOverPosition.x,
+				GameOverPosition.y);
+	}
+
+	/**
+	 * Build a new army
+	 */
+	private void buildInvaderArmy() {
+		addRow(InvaderType.Martian, 0);
+		addRow(InvaderType.Plutonian, 1);
+		addRow(InvaderType.Mercurian, 2);
+		addRow(InvaderType.Venusian, 3);
 	}
 
 	/**
@@ -96,11 +150,11 @@ public class Aliens {
 	 *            0..n the row number
 	 */
 	private void addRow(InvaderType invader, int row) {
-	
+
 		anchor.setLocation(new Point(30, 50 + ySpacing * row));
-	
+
 		for (int i = 0; i < numOfInvaders; i++) {
-	
+
 			switch (invader) {
 			case Martian:
 				invaders.add(new Martian(manager, anchor));
@@ -117,15 +171,5 @@ public class Aliens {
 			}
 			anchor.translate(xSpacing, 0);
 		}
-	}
-
-	/**
-	 *  Build a new army
-	 */
-	private void buildInvaderArmy() {
-		addRow(InvaderType.Martian, 0);
-		addRow(InvaderType.Plutonian, 1);
-		addRow(InvaderType.Mercurian, 2);
-		addRow(InvaderType.Venusian, 3);
 	}
 }

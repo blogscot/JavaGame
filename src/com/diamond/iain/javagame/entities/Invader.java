@@ -11,7 +11,8 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
 	
-	private static int speed = 2;
+	private static final int SPEED = 2;
+	private static int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
 	
@@ -38,6 +39,11 @@ public abstract class Invader implements Tile {
 		speed *= -1;
 	}
 	
+	// Let's begin at the start
+	public static void restartGame(){
+		speed = SPEED;
+	}
+	
 	/**
 	 * Make the invaders faster
 	 */
@@ -45,6 +51,7 @@ public abstract class Invader implements Tile {
 		// speed can be negative so be wary when adding
 		speed = Math.abs(speed)+1;
 	}
+	
 	public void moveDown(){
 		y += TileHeight;
 	}
@@ -55,6 +62,14 @@ public abstract class Invader implements Tile {
 	
 	public Point getPosition() {
 		return new Point(x,y);
+	}
+	
+	/**
+	 * 
+	 * @return 	true when any invader reaches the bottom of screen
+	 */
+	public boolean reachedPlayer(){
+		return y >= playerYPos;
 	}
 	
 	// Make an invader a bit smaller to enforce accuracy in game play

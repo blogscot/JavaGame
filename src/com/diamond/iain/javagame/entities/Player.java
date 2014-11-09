@@ -22,7 +22,7 @@ public class Player implements Tile {
 	private BufferedImage player;
 	private SpriteManager manager;
 	
-	private boolean alive = true;
+	//private static boolean alive = true;
 	private static int level = 1;
 	private static int lives = 3;
 
@@ -90,6 +90,14 @@ public class Player implements Tile {
 		}
 	}
 
+	
+	public static void restartGame(){
+		if (totalScore > highScore){
+			highScore = totalScore;
+		}
+		totalScore = 0;
+	}
+	
 	/**
 	 * Adds points to the players current score
 	 * 
@@ -125,7 +133,7 @@ public class Player implements Tile {
 		long duration = now - lastPressed;
 		
 		// Avoid the machine gun effect
-		if (fire && duration > 300 ) {
+		if (fire && duration > 300) {
 			// create new missile at player's x position
 			missiles.add(new Missile(manager, this.x));
 			lastPressed = System.currentTimeMillis();
@@ -146,16 +154,18 @@ public class Player implements Tile {
 		return missiles;
 	}
 
-	/**
-	 *  returns false when the player is killed
-	 */
+	// stub
 	@Override
 	public boolean isActive() {
-		return alive;
+		return false;
 	}
 
+	public static boolean isAlive() {
+		return lives > 0;
+	}
+	
 	@Override
 	public void destroy() {
-		alive = false;
+		lives -= 1;
 	}
 }

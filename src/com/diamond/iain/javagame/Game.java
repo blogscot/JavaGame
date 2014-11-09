@@ -129,6 +129,10 @@ public class Game extends Canvas implements Runnable {
 	public static Player getPlayer(){
 		return player;
 	}
+	
+	public static Aliens getAliens(){
+		return aliens;
+	}
 }
 
 
