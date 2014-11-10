@@ -35,7 +35,6 @@ public class Player implements Tile {
 	Point scorePosition = new Point(20, 20);
 	Point levelPosition = new Point(ScreenWidth, 20);
 	Point highScorePosition = new Point(ScreenWidth * SCALE - 200, 20);
-	public static final String HighScoresPath = "resources/highScores.txt";
 	
 	long lastPressed = System.currentTimeMillis();
 
@@ -46,7 +45,7 @@ public class Player implements Tile {
 		this.y = playerYPos;
 		this.player = manager.player;
 		this.manager = manager;
-		highScore = FileIOManager.readHighScoreFromFile(HighScoresPath);
+		highScore = FileIOManager.readHighScoreFromFile();
 		f = new Font("Dialog", Font.PLAIN, 18);
 		
 	}
@@ -100,7 +99,7 @@ public class Player implements Tile {
 	public static void restartGame() {
 		if (totalScore > highScore) {
 			highScore = totalScore;
-			FileIOManager.writeHighScoreToFile(HighScoresPath, highScore);
+			FileIOManager.writeHighScoreToFile(highScore);
 		}
 		level = 1;
 		totalScore = 0;
@@ -160,7 +159,11 @@ public class Player implements Tile {
 		return new Rectangle(x, y, TileWidth, TileHeight);
 	}
 
-	public static ArrayList<Missile> getMissiles() {
+	/**
+	 * 
+	 * @return an immutable copy of missiles
+	 */
+	public static final ArrayList<Missile> getMissiles() {
 		return missiles;
 	}
 
