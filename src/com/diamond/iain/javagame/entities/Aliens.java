@@ -1,7 +1,6 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
-import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
+import com.diamond.iain.javagame.utils.FileIOManager;
 
 public class Aliens {
 

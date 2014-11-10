@@ -13,6 +13,7 @@ import java.util.ListIterator;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
+import com.diamond.iain.javagame.utils.FileIOManager;
 
 public class Player implements Tile {
 
@@ -34,7 +35,8 @@ public class Player implements Tile {
 	Point scorePosition = new Point(20, 20);
 	Point levelPosition = new Point(ScreenWidth, 20);
 	Point highScorePosition = new Point(ScreenWidth * SCALE - 200, 20);
-
+	public static final String HighScoresPath = "resources/highScores.txt";
+	
 	long lastPressed = System.currentTimeMillis();
 
 	private static ArrayList<Missile> missiles = new ArrayList<>();
@@ -44,7 +46,9 @@ public class Player implements Tile {
 		this.y = playerYPos;
 		this.player = manager.player;
 		this.manager = manager;
+		highScore = FileIOManager.readHighScoreFromFile(HighScoresPath);
 		f = new Font("Dialog", Font.PLAIN, 18);
+		
 	}
 
 	@Override
@@ -96,6 +100,7 @@ public class Player implements Tile {
 	public static void restartGame() {
 		if (totalScore > highScore) {
 			highScore = totalScore;
+			FileIOManager.writeHighScoreToFile(HighScoresPath, highScore);
 		}
 		level = 1;
 		totalScore = 0;
@@ -109,7 +114,7 @@ public class Player implements Tile {
 	public static void addScore(int score) {
 		totalScore += score;
 	}
-
+	
 	public static void levelUp() {
 		level += 1;
 	}
