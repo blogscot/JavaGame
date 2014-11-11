@@ -144,7 +144,7 @@ public class Player implements Tile {
 		// Avoid the machine gun effect
 		if (fire && duration > 300) {
 			// create new missile at player's x position
-			missiles.add(new Missile(manager, this.x));
+			missiles.add(new PlayerMissile(manager, new Point(this.x, missileYPos)));
 			lastPressed = System.currentTimeMillis();
 		}
 	}
