@@ -15,8 +15,8 @@ import com.diamond.iain.javagame.gfx.SpriteManager;
 public class Aliens {
 
 	private Point anchor = new Point(30, 50);
-	private final int xSpacing = 45;
-	private final int ySpacing = 25;
+	private final int xSpacing = 55;
+	private final int ySpacing = 35;
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
 

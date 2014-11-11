@@ -70,6 +70,7 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		
 		init();
+		// 18ms produces ~60 fps
 		long sleepy = 18;
 		
 		while(running){
@@ -101,7 +102,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, ScreenWidth * SCALE, getScreenHeight() * SCALE);
+		g.fillRect(0, 0, ScreenWidth, ScreenHeight);
 		
 		// Let's draw the moving pieces
 		player.render(g);
@@ -114,10 +115,10 @@ public class Game extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		
 		Game game = new Game();
-		game.setPreferredSize(new Dimension(ScreenWidth*SCALE, getScreenHeight()*SCALE));
+		game.setPreferredSize(new Dimension(ScreenWidth, ScreenHeight));
 
 		JFrame frame = new JFrame("Space Invaders");
-		frame.setSize(ScreenWidth*SCALE, getScreenHeight()*SCALE);
+		frame.setSize(ScreenWidth, ScreenHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.add(game);

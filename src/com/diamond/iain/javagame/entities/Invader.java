@@ -10,21 +10,21 @@ import java.awt.image.BufferedImage;
 import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
-	
+
 	private static final int SPEED = 2;
 	private static int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
-	
+
 	protected BufferedImage alien;
-	
+
 	private final int xOffset = 10;
 	private final int yOffset = 5;
-	private final int missileWidth = TileWidth-20;
-	private final int missileHeight = TileHeight-10;
-	
+	private final int missileWidth = TileWidth - 20;
+	private final int missileHeight = TileHeight - 10;
+
 	protected int score = 0;
-	
+
 	@Override
 	public void tick() {
 		x += speed;
@@ -34,57 +34,58 @@ public abstract class Invader implements Tile {
 	public void render(Graphics g) {
 		g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
 	}
-	
-	public void reverseDirection(){
+
+	public void reverseDirection() {
 		speed *= -1;
 	}
-	
+
 	// Let's begin at the start
-	public static void restartGame(){
+	public static void restartGame() {
 		speed = SPEED;
 	}
-	
+
 	/**
 	 * Make the invaders faster
 	 */
-	public static void levelUp(){
+	public static void levelUp() {
 		// speed can be negative so be wary when adding
-		speed = Math.abs(speed)+1;
+		speed = Math.abs(speed) + 1;
 	}
-	
-	public void moveDown(){
+
+	public void moveDown() {
 		y += TileHeight;
 	}
 
 	public int getScore() {
 		return score;
 	}
-	
+
 	public Point getPosition() {
-		return new Point(x,y);
+		return new Point(x, y);
 	}
-	
+
 	/**
 	 * 
-	 * @return 	true when any invader reaches the bottom of screen
+	 * @return true when any invader reaches the bottom of screen
 	 */
-	public boolean reachedPlayer(){
+	public boolean reachedPlayer() {
 		return y >= playerYPos;
 	}
-	
+
 	// Make an invader a bit smaller to enforce accuracy in game play
 	@Override
-	public Rectangle getBounds(){
-		return new Rectangle(x+xOffset,y+yOffset, missileWidth, missileHeight);
+	public Rectangle getBounds() {
+		return new Rectangle(x + xOffset, y + yOffset, missileWidth,
+				missileHeight);
 	}
 
 	@Override
-	public boolean isActive(){
+	public boolean isActive() {
 		return isActive;
 	}
 
 	@Override
-	public void destroy(){
+	public void destroy() {
 		isActive = false;
 	}
 }
