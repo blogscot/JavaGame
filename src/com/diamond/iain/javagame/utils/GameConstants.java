@@ -7,20 +7,53 @@ public class GameConstants {
 
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-	public static final int ScreenWidth = (int)screenSize.getWidth();
-	public static int ScreenHeight = (int)screenSize.getHeight();
+	private static final int MacScreenWidth = (int)screenSize.getWidth();
+	private static final int MacScreenHeight = (int)screenSize.getHeight();
+	private static final int MacXSpacing = 55;
+	private static final int MacYSpacing = 35;
+
+	private static final int PCScreenWidth = 1200;
+	private static final int PCScreenHeight = 1000;
+	private static final int PCXSpacing = 45;
+	private static final int PCYSpacing = 25;
 
 	public static final int TileHeight = 40;
 	public static final int TileWidth = 60;
 
-	public static final int scaledHeight = (int)(TileHeight / 1.5);
-	public static final int scaledWidth = (int)(TileWidth / 1.5);
+	public static final int scaledHeight = (int)(TileHeight / getScaling());
+	public static final int scaledWidth = (int)(TileWidth / getScaling());
 
 	public static final int LeftWall = 0;
-	public static final int RightWall = ScreenWidth - scaledWidth;
+	public static final int RightWall = getScreenDimension().width - scaledWidth;
 	
-	public static final int playerYPos = ScreenHeight - 80;
+	public static final int playerYPos = getScreenDimension().height - 80;
 	public static final int missileYPos = playerYPos - scaledHeight;
 	
+
+	// These are convenience methods so that the game can be run on two
+	// different screen sizes (PC and Mac) without having to constantly tweak
+	// these constants by hand.
+	
+	public static Dimension getScreenDimension(){
+		if (OSValidator.isMac()){
+			return new Dimension(MacScreenWidth, MacScreenHeight);
+		}
+		return new Dimension(PCScreenWidth, PCScreenHeight);
+	}
+
+	// XSpacing = width, YSpacing = height
+	public static Dimension getSpacingDimension(){
+		if (OSValidator.isMac()){
+			return new Dimension(MacXSpacing, MacYSpacing);
+		}
+		return new Dimension(PCXSpacing, PCYSpacing);
+	}
+	
+	private static double getScaling(){
+		if (OSValidator.isMac()){
+			return 1.5;
+		}
+		return 2;
+	}
 
 }

@@ -1,6 +1,5 @@
 package com.diamond.iain.javagame;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -17,6 +16,7 @@ import com.diamond.iain.javagame.gfx.ImageLoader;
 import com.diamond.iain.javagame.gfx.KeyManager;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.gfx.SpriteSheet;
+import com.diamond.iain.javagame.utils.GameConstants;
 
 public class Game extends Canvas implements Runnable {
 
@@ -28,6 +28,10 @@ public class Game extends Canvas implements Runnable {
 	
 	private static Player player;
 	private static Aliens aliens;
+	
+	// Convenience variables to save typing
+	private static int screenWidth = GameConstants.getScreenDimension().width;
+	private static int screenHeight = GameConstants.getScreenDimension().height;
 	
 	public void init() {
 		ImageLoader loader = new ImageLoader();
@@ -102,7 +106,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, ScreenWidth, ScreenHeight);
+		g.fillRect(0, 0, screenWidth, screenHeight);
 		
 		// Let's draw the moving pieces
 		player.render(g);
@@ -115,10 +119,10 @@ public class Game extends Canvas implements Runnable {
 	public static void main(String[] args) {
 		
 		Game game = new Game();
-		game.setPreferredSize(new Dimension(ScreenWidth, ScreenHeight));
+		game.setPreferredSize(new Dimension(screenWidth, screenHeight));
 
 		JFrame frame = new JFrame("Space Invaders");
-		frame.setSize(ScreenWidth, ScreenHeight);
+		frame.setSize(screenWidth, screenHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.add(game);

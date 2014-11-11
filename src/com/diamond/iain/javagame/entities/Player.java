@@ -33,8 +33,8 @@ public class Player implements Tile {
 
 	Font f;
 	Point scorePosition = new Point(20, 20);
-	Point levelPosition = new Point(ScreenWidth / 2, 20);
-	Point highScorePosition = new Point(ScreenWidth - 200, 20);
+	Point levelPosition = new Point(getScreenDimension().width / 2, 20);
+	Point highScorePosition = new Point(getScreenDimension().width - 200, 20);
 	
 	long lastPressed = System.currentTimeMillis();
 

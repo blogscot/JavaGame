@@ -1,7 +1,6 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
-import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,8 +14,6 @@ import com.diamond.iain.javagame.gfx.SpriteManager;
 public class Aliens {
 
 	private Point anchor = new Point(30, 50);
-	private final int xSpacing = 55;
-	private final int ySpacing = 35;
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
 
@@ -152,7 +149,7 @@ public class Aliens {
 	 */
 	private void addRow(InvaderType invader, int row) {
 
-		anchor.setLocation(new Point(30, 50 + ySpacing * row));
+		anchor.setLocation(new Point(30, 50 + getSpacingDimension().height * row));
 
 		for (int i = 0; i < numOfInvaders; i++) {
 
@@ -170,7 +167,7 @@ public class Aliens {
 				invaders.add(new Venusian(manager, anchor));
 				break;
 			}
-			anchor.translate(xSpacing, 0);
+			anchor.translate(getSpacingDimension().width, 0);
 		}
 	}
 }
