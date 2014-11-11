@@ -5,10 +5,6 @@ import java.awt.Toolkit;
 
 public class GameConstants {
 
-	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-	private static final int MacScreenWidth = (int)screenSize.getWidth();
-	private static final int MacScreenHeight = (int)screenSize.getHeight();
 	private static final int MacXSpacing = 55;
 	private static final int MacYSpacing = 35;
 
@@ -37,7 +33,7 @@ public class GameConstants {
 	
 	public static Dimension getScreenDimension(){
 		if (OSValidator.isMac()){
-			return new Dimension(MacScreenWidth, MacScreenHeight);
+			return Toolkit.getDefaultToolkit().getScreenSize();
 		}
 		return new Dimension(PCScreenWidth, PCScreenHeight);
 	}

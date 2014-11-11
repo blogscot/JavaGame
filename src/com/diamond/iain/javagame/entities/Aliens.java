@@ -141,6 +141,7 @@ public class Aliens {
 	}
 
 	/**
+	 * Adds a new row to the Invader army
 	 * 
 	 * @param invader
 	 *            the invader type
@@ -149,6 +150,7 @@ public class Aliens {
 	 */
 	private void addRow(InvaderType invader, int row) {
 
+		// set vertical gap between rows
 		anchor.setLocation(new Point(30, 50 + getSpacingDimension().height * row));
 
 		for (int i = 0; i < numOfInvaders; i++) {
@@ -167,6 +169,7 @@ public class Aliens {
 				invaders.add(new Venusian(manager, anchor));
 				break;
 			}
+			// set horizontal gap between invaders
 			anchor.translate(getSpacingDimension().width, 0);
 		}
 	}

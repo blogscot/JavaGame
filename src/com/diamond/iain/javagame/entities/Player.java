@@ -23,7 +23,6 @@ public class Player implements Tile {
 	private BufferedImage player;
 	private SpriteManager manager;
 
-	// private static boolean alive = true;
 	private static int level = 1;
 	private static int lives = 3;
 
@@ -58,6 +57,7 @@ public class Player implements Tile {
 			x -= SPEED;
 		}
 		
+		// check player's next move doesn't go off screen
 		if (right && x + SPEED <= RightWall) {
 			x += SPEED;
 		}
@@ -67,7 +67,7 @@ public class Player implements Tile {
 			if (m.getPosition().getY() > TopWall) {
 				m.tick();
 			} else {
-				// otherwise remove from list
+				// otherwise mark for removal from list
 				m.destroy();
 			}
 		}
