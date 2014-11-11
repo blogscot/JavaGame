@@ -23,6 +23,7 @@ public class GameConstants {
 	public static final int scaledHeight = (int)(TileHeight / getScaling());
 	public static final int scaledWidth = (int)(TileWidth / getScaling());
 
+	public static final int TopWall = scaledHeight;
 	public static final int LeftWall = 0;
 	public static final int RightWall = getScreenDimension().width - scaledWidth;
 	

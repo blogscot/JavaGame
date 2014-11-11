@@ -64,7 +64,7 @@ public class Player implements Tile {
 
 		// Move each missile if it is still on screen
 		for (Missile m : missiles) {
-			if (m.getPosition().getY() > 0) {
+			if (m.getPosition().getY() > TopWall) {
 				m.tick();
 			} else {
 				// otherwise remove from list
