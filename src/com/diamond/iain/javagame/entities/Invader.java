@@ -1,6 +1,9 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.TileHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -11,8 +14,8 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
 
-	private static final int SPEED = 2;    // the start speed
-	private static int speed = SPEED;      // speed also controls direction
+	private static final int SPEED = 2; // the start speed
+	protected static int speed = SPEED; // speed also controls direction
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
 
@@ -57,7 +60,7 @@ public abstract class Invader implements Tile {
 	}
 
 	/*
-	 *  returns the current invader's position
+	 * returns the current invader's position
 	 */
 	public Point getPosition() {
 		return new Point(x, y);
@@ -65,7 +68,7 @@ public abstract class Invader implements Tile {
 
 	/**
 	 * 
-	 * @return  true when the invader reaches the player's position
+	 * @return true when the invader reaches the player's position
 	 */
 	public boolean reachedPlayer() {
 		return y >= playerYPos;
@@ -73,7 +76,7 @@ public abstract class Invader implements Tile {
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, scaledWidth,	scaledHeight);
+		return new Rectangle(x, y, scaledWidth, scaledHeight);
 	}
 
 	@Override

@@ -66,7 +66,12 @@ public class Aliens {
 				}
 			}
 
-			invaders.stream().forEach(Invader::tick);
+			invaders.stream().forEach(invader -> {
+				if (invader instanceof Martian) {
+					((Martian) invader).fire();
+				}
+				invader.tick();
+			});
 		}
 	}
 
@@ -151,7 +156,8 @@ public class Aliens {
 	private void addRow(InvaderType invader, int row) {
 
 		// set vertical gap between rows
-		anchor.setLocation(new Point(30, 50 + getSpacingDimension().height * row));
+		anchor.setLocation(new Point(30, 50 + getSpacingDimension().height
+				* row));
 
 		for (int i = 0; i < numOfInvaders; i++) {
 
