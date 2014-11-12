@@ -159,7 +159,7 @@ public class Player implements Tile {
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, TileWidth, TileHeight);
+		return new Rectangle(x, y, scaledWidth, scaledHeight);
 	}
 
 	/**
