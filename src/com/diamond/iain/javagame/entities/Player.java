@@ -33,8 +33,9 @@ public class Player implements Tile {
 	Font f;
 	Point scorePosition = new Point(20, 20);
 	Point levelPosition = new Point(getScreenDimension().width / 2, 20);
+	Point livesPosition = new Point(20, getScreenDimension().height - TileHeight);
 	Point highScorePosition = new Point(getScreenDimension().width - 200, 20);
-	
+
 	long lastPressed = System.currentTimeMillis();
 
 	private static ArrayList<Missile> missiles = new ArrayList<>();
@@ -46,7 +47,7 @@ public class Player implements Tile {
 		this.manager = manager;
 		highScore = FileIOManager.readHighScoreFromFile();
 		f = new Font("Dialog", Font.PLAIN, 18);
-		
+
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class Player implements Tile {
 		if (left && x >= LeftWall) {
 			x -= SPEED;
 		}
-		
+
 		// check player's next move doesn't go off screen
 		if (right && x + SPEED <= RightWall) {
 			x += SPEED;
@@ -113,7 +114,7 @@ public class Player implements Tile {
 	public static void addScore(int score) {
 		totalScore += score;
 	}
-	
+
 	public static void levelUp() {
 		level += 1;
 	}
@@ -123,6 +124,7 @@ public class Player implements Tile {
 		g.setColor(Color.white);
 		g.drawString("Player Score: " + totalScore, scorePosition.x,
 				scorePosition.y);
+		g.drawString("Lives " + lives, livesPosition.x, livesPosition.y);
 		g.drawString("Level " + level, levelPosition.x, levelPosition.y);
 		g.drawString("High Score: " + highScore, highScorePosition.x,
 				highScorePosition.y);
@@ -142,9 +144,10 @@ public class Player implements Tile {
 		long duration = now - lastPressed;
 
 		// Avoid the machine gun effect
-		if (fire && duration > 300) {
+		if (fire && duration > 600) {
 			// create new missile at player's x position
-			missiles.add(new PlayerMissile(manager, new Point(this.x, missileYPos)));
+			missiles.add(new PlayerMissile(manager, new Point(this.x,
+					missileYPos)));
 			lastPressed = System.currentTimeMillis();
 		}
 	}
