@@ -22,7 +22,7 @@ public class Martian extends Invader implements Tile, CanFire {
 	private ArrayList<Missile> missiles = new ArrayList<>();
 	private boolean timerRunning = false;
 	private SpriteManager manager;
-	private final int ShotRate = 40000; 
+	private final int ShotRate = 40000;
 
 	public Martian(SpriteManager manager, Point p) {
 		x = p.x;
@@ -57,17 +57,14 @@ public class Martian extends Invader implements Tile, CanFire {
 		// Note: use ListIterator to avoid ConcurrentModificationException
 		ListIterator<Missile> it = missiles.listIterator();
 
-		if (this instanceof Martian) {
-
-			while (it.hasNext()) {
-				Missile m = it.next();
-				if (m.isActive()) {
-					// render each missile if it is still on screen
-					m.render(g);
-				} else {
-					// remove 'destroyed' missiles
-					it.remove();
-				}
+		while (it.hasNext()) {
+			Missile m = it.next();
+			if (m.isActive()) {
+				// render each missile if it is still on screen
+				m.render(g);
+			} else {
+				// remove 'destroyed' missiles
+				it.remove();
 			}
 		}
 	}
@@ -88,7 +85,8 @@ public class Martian extends Invader implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					timerRunning = false;
-					missiles.add(new InvaderMissile(manager, new Point(x, y + scaledHeight)));
+					missiles.add(new InvaderMissile(manager, new Point(x, y
+							+ scaledHeight)));
 				}
 			});
 

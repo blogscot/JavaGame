@@ -131,6 +131,11 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
+	public static boolean isGameOver() {
+		return Aliens.isGameOver();
+	}
+	
+	// KeyManager updates Player and Aliens with key presses 
 	public static Player getPlayer(){
 		return player;
 	}

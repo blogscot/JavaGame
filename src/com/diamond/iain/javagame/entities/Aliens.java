@@ -19,8 +19,6 @@ public class Aliens {
 
 	Point GameOverPosition = new Point(360, 400);
 	Font f = new Font("Dialog", Font.PLAIN, 32);
-	
-	private boolean aliensHaveInvaded = false;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
@@ -42,54 +40,49 @@ public class Aliens {
 
 	public void tick() {
 
-		// is Game Over?
-		if (aliensHaveInvaded) return;
-		
+		if (isGameOver())
+			return;
+
+		// Check if the game is about to be over
 		invaders.stream().forEach(invader -> {
-			
+
 			if (invader.reachedPlayer()) {
 				invader.destroy();
 				Player.losesOneLife();
 				if (!Player.isAlive()) {
-					// there may be (non-moving) invaders remaining but we can't
-					// clear the collection in this loop. So set flags and return
-					aliensHaveInvaded = true;
 					gameState = GameState.Over;
 					return;
 				}
 			}
 		});
 
-		if (gameState != GameState.Over) {
-
-			if (isArmyDefeated()) {
-				Invader.levelUp();
-				Player.levelUp();
-				buildInvaderArmy();
-			}
-
-			// check if any invader has hit the left or right wall
-			for (Invader invader : invaders) {
-				double pos = invader.getPosition().getX();
-				if (pos > RightWall || pos < LeftWall) {
-					invader.reverseDirection();
-					invaders.stream().forEach(Invader::moveDown);
-					break;
-				}
-			}
-
-			invaders.stream().forEach(invader -> {
-				if (invader instanceof Martian) {
-					((Martian) invader).fire();
-				}
-				invader.tick();
-			});
+		if (isArmyDefeated()) {
+			Invader.levelUp();
+			Player.levelUp();
+			buildInvaderArmy();
 		}
+
+		// check if any invader has hit the left or right wall
+		for (Invader invader : invaders) {
+			double pos = invader.getPosition().getX();
+			if (pos > RightWall || pos < LeftWall) {
+				invader.reverseDirection();
+				invaders.stream().forEach(Invader::moveDown);
+				break;
+			}
+		}
+
+		invaders.stream().forEach(invader -> {
+			if (invader instanceof Martian) {
+				((Martian) invader).fire();
+			}
+			invader.tick();
+		});
 	}
 
 	public void render(Graphics g) {
 
-		if (gameState == GameState.Over) {
+		if (isGameOver()) {
 			displayGameOver(g);
 			return;
 		}
@@ -121,16 +114,15 @@ public class Aliens {
 			}
 		}
 	}
-	
+
 	/**
 	 * The user can restart the game using a key press
 	 * 
-	 * @param restart
+	 * @param restart  true to restart
 	 */
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
 			gameState = GameState.Active;
-			aliensHaveInvaded = false;
 			invaders.clear();
 			Invader.restartGame();
 			Player.restartGame();
@@ -144,6 +136,10 @@ public class Aliens {
 	 */
 	public boolean isArmyDefeated() {
 		return invaders.size() == 0;
+	}
+
+	public static boolean isGameOver() {
+		return gameState == GameState.Over;
 	}
 
 	private void displayGameOver(Graphics g) {
