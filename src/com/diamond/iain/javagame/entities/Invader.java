@@ -11,17 +11,12 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Invader implements Tile {
 
-	private static final int SPEED = 2;
-	private static int speed = SPEED;
+	private static final int SPEED = 2;    // the start speed
+	private static int speed = SPEED;      // speed also controls direction
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
 
 	protected BufferedImage alien;
-
-	private final int xOffset = 10;
-	private final int yOffset = 5;
-	private final int missileWidth = TileWidth - 20;
-	private final int missileHeight = TileHeight - 10;
 
 	protected int score = 0;
 
@@ -52,6 +47,7 @@ public abstract class Invader implements Tile {
 		speed = Math.abs(speed) + 1;
 	}
 
+	// the invaders are approaching
 	public void moveDown() {
 		y += TileHeight;
 	}
@@ -60,23 +56,24 @@ public abstract class Invader implements Tile {
 		return score;
 	}
 
+	/*
+	 *  returns the current invader's position
+	 */
 	public Point getPosition() {
 		return new Point(x, y);
 	}
 
 	/**
 	 * 
-	 * @return true when any invader reaches the bottom of screen
+	 * @return  true when the invader reaches the player's position
 	 */
 	public boolean reachedPlayer() {
 		return y >= playerYPos;
 	}
 
-	// Make an invader a bit smaller to enforce accuracy in game play
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x + xOffset, y + yOffset, missileWidth,
-				missileHeight);
+		return new Rectangle(x, y, scaledWidth,	scaledHeight);
 	}
 
 	@Override
