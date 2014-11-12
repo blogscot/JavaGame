@@ -33,7 +33,7 @@ public class Player implements Tile {
 	Font f;
 	Point scorePosition = new Point(20, 20);
 	Point levelPosition = new Point(getScreenDimension().width / 2, 20);
-	Point livesPosition = new Point(20, getScreenDimension().height - TileHeight);
+	Point livesPosition = new Point(20, getScreenDimension().height - 45);
 	Point highScorePosition = new Point(getScreenDimension().width - 200, 20);
 
 	long lastPressed = System.currentTimeMillis();
@@ -103,6 +103,7 @@ public class Player implements Tile {
 			FileIOManager.writeHighScoreToFile(highScore);
 		}
 		level = 1;
+		lives = 3;
 		totalScore = 0;
 	}
 
@@ -176,6 +177,10 @@ public class Player implements Tile {
 		return false;
 	}
 
+	public static void losesOneLife() {
+		lives = lives > 0 ? lives -= 1 : 0;
+	}
+	
 	public static boolean isAlive() {
 		return lives > 0;
 	}

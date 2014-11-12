@@ -19,6 +19,8 @@ public class Aliens {
 
 	Point GameOverPosition = new Point(360, 400);
 	Font f = new Font("Dialog", Font.PLAIN, 32);
+	
+	private boolean aliensHaveInvaded = false;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
@@ -41,10 +43,20 @@ public class Aliens {
 	public void tick() {
 
 		// is Game Over?
+		if (aliensHaveInvaded) return;
+		
 		invaders.stream().forEach(invader -> {
+			
 			if (invader.reachedPlayer()) {
-				gameState = GameState.Over;
-				return;
+				invader.destroy();
+				Player.losesOneLife();
+				if (!Player.isAlive()) {
+					// there may be (non-moving) invaders remaining but we can't
+					// clear the collection in this loop. So set flags and return
+					aliensHaveInvaded = true;
+					gameState = GameState.Over;
+					return;
+				}
 			}
 		});
 
@@ -109,10 +121,16 @@ public class Aliens {
 			}
 		}
 	}
-
+	
+	/**
+	 * The user can restart the game using a key press
+	 * 
+	 * @param restart
+	 */
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
 			gameState = GameState.Active;
+			aliensHaveInvaded = false;
 			invaders.clear();
 			Invader.restartGame();
 			Player.restartGame();

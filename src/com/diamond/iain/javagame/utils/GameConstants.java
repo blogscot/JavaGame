@@ -48,7 +48,7 @@ public class GameConstants {
 	
 	private static double getScaling(){
 		if (OSValidator.isMac()){
-			return 1.5;
+			return 1.7;
 		}
 		return 2;
 	}
