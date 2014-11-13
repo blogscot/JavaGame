@@ -14,6 +14,7 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
+import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 
@@ -23,7 +24,8 @@ public class Martian extends Invader implements Tile, CanFire {
 	private boolean timerRunning = false;
 	private SpriteManager manager;
 	private final int ShotRate = 40000;
-
+	Player player = Game.getPlayer();
+	
 	public Martian(SpriteManager manager, Point p) {
 		x = p.x;
 		y = p.y;
@@ -54,6 +56,14 @@ public class Martian extends Invader implements Tile, CanFire {
 		// draw Invader
 		g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
 
+		// Collision detection
+		missiles.stream().forEach(missile -> {
+				if (player.getBounds().intersects(missile.getBounds())) {
+					Player.losesOneLife();
+					missile.destroy();
+				}
+		});
+		
 		// Note: use ListIterator to avoid ConcurrentModificationException
 		ListIterator<Missile> it = missiles.listIterator();
 

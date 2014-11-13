@@ -26,7 +26,7 @@ public class Aliens {
 		Active, Over
 	}
 
-	private static GameState gameState = GameState.Active;
+	private static GameState gameState = GameState.Over;
 
 	enum InvaderType {
 		Martian, Plutonian, Mercurian, Venusian
@@ -34,14 +34,19 @@ public class Aliens {
 
 	public Aliens(SpriteManager manager) {
 		this.manager = manager;
-
-		buildInvaderArmy();
 	}
 
 	public void tick() {
 
 		if (isGameOver())
 			return;
+		
+		// Check if player has lost all their lives
+		if (!Player.isAlive()) 
+			{
+				gameState = GameState.Over;
+				return;
+			}
 
 		// Check if the game is about to be over
 		invaders.stream().forEach(invader -> {
@@ -145,7 +150,7 @@ public class Aliens {
 	private void displayGameOver(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
-		g.drawString("Game Over. Press 'S' to restart.", GameOverPosition.x,
+		g.drawString("Press 's' to start a new game.", GameOverPosition.x,
 				GameOverPosition.y);
 	}
 
