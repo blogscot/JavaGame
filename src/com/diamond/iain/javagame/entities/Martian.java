@@ -16,6 +16,7 @@ import javax.swing.Timer;
 
 import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
+import com.diamond.iain.javagame.tiles.CanFire;
 import com.diamond.iain.javagame.tiles.Tile;
 
 public class Martian extends Invader implements Tile, CanFire {

@@ -80,6 +80,8 @@ public class Aliens {
 		invaders.stream().forEach(invader -> {
 			if (invader instanceof Martian) {
 				((Martian) invader).fire();
+			} else if (invader instanceof Mercurian) {
+				((Mercurian) invader).cloak();
 			}
 			invader.tick();
 		});
