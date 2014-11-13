@@ -42,6 +42,7 @@ public class Aliens {
 			return;
 		
 		// Check if player has lost all their lives
+		// e.g. shot by invader missiles
 		if (!Player.isAlive()) 
 			{
 				gameState = GameState.Over;
@@ -70,13 +71,14 @@ public class Aliens {
 		// check if any invader has hit the left or right wall
 		for (Invader invader : invaders) {
 			double pos = invader.getPosition().getX();
-			if (pos > RightWall || pos < LeftWall) {
+			if (pos + invader.getWidth() > RightWall || pos < LeftWall) {
 				invader.reverseDirection();
 				invaders.stream().forEach(Invader::moveDown);
 				break;
 			}
 		}
 
+		// Everybody moves. Special invaders use special abilities
 		invaders.stream().forEach(invader -> {
 			if (invader instanceof Martian) {
 				((Martian) invader).fire();

@@ -21,15 +21,14 @@ public class GameConstants {
 
 	public static final int TopWall = scaledHeight;
 	public static final int LeftWall = 0;
-	public static final int RightWall = getScreenDimension().width - scaledWidth;
+	public static final int RightWall = getScreenDimension().width;
 	
 	public static final int playerYPos = getScreenDimension().height - 80;
 	public static final int missileYPos = playerYPos - scaledHeight;
 	
 
 	// These are convenience methods so that the game can be run on two
-	// different screen sizes (PC and Mac) without having to constantly tweak
-	// these constants by hand.
+	// different screen sizes (PC and Mac)
 	
 	public static Dimension getScreenDimension(){
 		if (OSValidator.isMac()){

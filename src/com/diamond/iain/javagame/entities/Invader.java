@@ -18,6 +18,8 @@ public abstract class Invader implements Tile {
 	protected static int speed = SPEED; // speed also controls direction
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
+	private static int width = scaledWidth;
+	private static int height = scaledHeight;
 
 	protected BufferedImage alien;
 
@@ -30,7 +32,7 @@ public abstract class Invader implements Tile {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
+		g.drawImage(alien, x, y, width, height, null);
 	}
 
 	public void reverseDirection() {
@@ -65,6 +67,10 @@ public abstract class Invader implements Tile {
 	public Point getPosition() {
 		return new Point(x, y);
 	}
+	
+	public int getWidth() {
+		return width;
+	}
 
 	/**
 	 * 
@@ -76,7 +82,7 @@ public abstract class Invader implements Tile {
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, scaledWidth, scaledHeight);
+		return new Rectangle(x, y, width, height);
 	}
 
 	@Override

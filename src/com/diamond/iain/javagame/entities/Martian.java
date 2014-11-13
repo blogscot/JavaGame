@@ -26,6 +26,7 @@ public class Martian extends Invader implements Tile, CanFire {
 	private SpriteManager manager;
 	private final int ShotRate = 40000;
 	Player player = Game.getPlayer();
+	Random r = new Random();
 	
 	public Martian(SpriteManager manager, Point p) {
 		x = p.x;
@@ -86,7 +87,6 @@ public class Martian extends Invader implements Tile, CanFire {
 	 */
 	@Override
 	public void fire() {
-		Random r = new Random();
 
 		if (!timerRunning) {
 			timerRunning = true;
