@@ -1,8 +1,6 @@
 package com.diamond.iain.javagame.entities;
 
 import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -56,7 +54,7 @@ public class Martian extends Invader implements Tile, CanFire {
 	public void render(Graphics g) {
 
 		// draw Invader
-		g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
+		g.drawImage(alien, x, y, width, height, null);
 
 		// Collision detection
 		missiles.stream().forEach(missile -> {
@@ -97,7 +95,7 @@ public class Martian extends Invader implements Tile, CanFire {
 				public void actionPerformed(ActionEvent arg0) {
 					timerRunning = false;
 					missiles.add(new InvaderMissile(manager, new Point(x, y
-							+ scaledHeight)));
+							+ height)));
 				}
 			});
 

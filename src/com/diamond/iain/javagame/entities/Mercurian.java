@@ -1,8 +1,5 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
-
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -49,7 +46,7 @@ public class Mercurian extends Invader implements Tile, Cloakable {
 	public void render(Graphics g) {
 		if (!cloakEngaged)
 		{
-			g.drawImage(alien, x, y, scaledWidth, scaledHeight, null);
+			g.drawImage(alien, x, y, width, height, null);
 		}
 	}
 	

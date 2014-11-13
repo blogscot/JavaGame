@@ -16,6 +16,8 @@ public abstract class Ship implements Tile {
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
+	protected static final int width = scaledWidth * 2;
+	protected static final int height = scaledHeight;
 
 	protected BufferedImage ship;
 	
@@ -28,7 +30,7 @@ public abstract class Ship implements Tile {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(ship, x, y, scaledWidth * 2, scaledHeight, null);
+		g.drawImage(ship, x, y, width, height, null);
 	}
 
 	@Override
@@ -46,8 +48,12 @@ public abstract class Ship implements Tile {
 		return new Point(x, y);
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	
 	@Override
 	public Rectangle getBounds(){
-		return new Rectangle(x,y, scaledWidth * 2, scaledHeight);
+		return new Rectangle(x,y, width, height);
 	}
 }

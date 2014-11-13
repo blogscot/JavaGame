@@ -1,8 +1,5 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
-
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -49,7 +46,7 @@ public class Destroyer extends Ship implements Tile, Cloakable {
 	public void render(Graphics g) {
 		if (!cloakEngaged)
 		{
-			g.drawImage(ship, x, y, scaledWidth * 2, scaledHeight, null);
+			g.drawImage(ship, x, y, width, height, null);
 		}
 	}
 	

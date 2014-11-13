@@ -1,6 +1,5 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.TileHeight;
 import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
 import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
 import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
@@ -18,8 +17,8 @@ public abstract class Invader implements Tile {
 	protected static int speed = SPEED; // speed also controls direction
 	protected int x = 0, y = 0;
 	protected boolean isActive = true;
-	private static int width = scaledWidth;
-	private static int height = scaledHeight;
+	protected static final int width = scaledWidth;
+	protected static final int height = scaledHeight;
 
 	protected BufferedImage alien;
 
@@ -54,7 +53,7 @@ public abstract class Invader implements Tile {
 
 	// the invaders are approaching
 	public void moveDown() {
-		y += TileHeight;
+		y += height;
 	}
 
 	public int getScore() {
