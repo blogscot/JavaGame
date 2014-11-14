@@ -6,8 +6,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Random;
+
+import javax.swing.Timer;
 
 import com.diamond.iain.javagame.gfx.SpriteManager;
 
@@ -16,9 +21,15 @@ public class Aliens {
 	private Point anchor = new Point(30, 50);
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
-
+	
 	Point GameOverPosition = new Point(360, 400);
 	Font f = new Font("Dialog", Font.PLAIN, 32);
+	
+	private final int ShipFreq = 20000;
+	private final int ShipInitialDelay = 30000;
+	private boolean timerRunning = false;
+	Random r = new Random();
+	Destroyer destroyer;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
@@ -34,6 +45,7 @@ public class Aliens {
 
 	public Aliens(SpriteManager manager) {
 		this.manager = manager;
+		destroyer = new Destroyer(manager);
 	}
 
 	public void tick() {
@@ -62,11 +74,13 @@ public class Aliens {
 			}
 		});
 
-		if (isArmyDefeated()) {
+		if (isArmyDefeated() && !destroyer.isActive()) {
 			Invader.levelUp();
 			Player.levelUp();
 			buildInvaderArmy();
 		}
+		
+		addDestroyer();
 
 		// check if any invader has hit the left or right wall
 		for (Invader invader : invaders) {
@@ -76,6 +90,14 @@ public class Aliens {
 				invaders.stream().forEach(Invader::moveDown);
 				break;
 			}
+		}
+		
+		// check if destroyer is still on the screen
+		if (destroyer.isActive && destroyer.getPosition().getX() < RightWall){
+			destroyer.cloak();
+			destroyer.tick();
+		} else {
+			destroyer.destroy();
 		}
 
 		// Everybody moves. Special invaders use special abilities
@@ -122,6 +144,10 @@ public class Aliens {
 				it.remove();
 			}
 		}
+		
+		if (destroyer.isActive){
+			destroyer.render(g);
+		}
 	}
 
 	/**
@@ -131,11 +157,15 @@ public class Aliens {
 	 */
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
-			gameState = GameState.Active;
 			invaders.clear();
 			Invader.restartGame();
 			Player.restartGame();
+			destroyer.restartGame();
 			buildInvaderArmy();
+			// Key presses are asynchronous so make sure the invader
+			// army is finished construction before starting the game for real, 
+			// comparing list + modifying list simultaneously = BAD! see tick()
+			gameState = GameState.Active;
 		}
 	}
 
@@ -158,6 +188,27 @@ public class Aliens {
 				GameOverPosition.y);
 	}
 
+	
+	public void addDestroyer() {
+
+		if (!timerRunning) {
+			timerRunning = true;
+
+			Timer t = new Timer(r.nextInt(ShipFreq), new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					timerRunning = false;
+					destroyer.resetPosition();
+					destroyer.isActive = true;
+				}
+			});
+
+			t.setInitialDelay(ShipInitialDelay);
+			t.setRepeats(false);
+			t.start();
+		}
+	}
 	/**
 	 * Build a new army
 	 */
