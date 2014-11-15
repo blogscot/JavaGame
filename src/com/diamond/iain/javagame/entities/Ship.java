@@ -32,6 +32,10 @@ public abstract class Ship implements Tile {
 	public void render(Graphics g) {
 		g.drawImage(ship, x, y, width, height, null);
 	}
+	
+	public int getScore() {
+		return score;
+	}
 
 	@Override
 	public void destroy() {

@@ -20,8 +20,8 @@ import com.diamond.iain.javagame.tiles.Tile;
 public class Martian extends Invader implements Tile, CanFire {
 
 	private ArrayList<Missile> missiles = new ArrayList<>();
-	private boolean timerRunning = false;
 	private SpriteManager manager;
+	private boolean timerRunning = false;
 	private final int ShotRate = 40000;
 	Player player = Game.getPlayer();
 	Random r = new Random();

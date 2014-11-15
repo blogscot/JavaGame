@@ -95,6 +95,7 @@ public class Aliens {
 		// check if destroyer is still on the screen
 		if (destroyer.isActive && destroyer.getPosition().getX() < RightWall){
 			destroyer.cloak();
+			destroyer.fire();
 			destroyer.tick();
 		} else {
 			destroyer.destroy();
@@ -131,7 +132,14 @@ public class Aliens {
 					missile.destroy();
 				}
 			});
+			
+			if(destroyer.getBounds().intersects(missile.getBounds())){
+				Player.addScore(destroyer.getScore());
+				destroyer.destroy();
+				missile.destroy();
+			}
 		});
+		
 
 		// potentially resizing the collection so use iterators
 		while (it.hasNext()) {
