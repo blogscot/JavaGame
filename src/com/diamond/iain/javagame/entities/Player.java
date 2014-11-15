@@ -59,7 +59,7 @@ public class Player implements Tile {
 		}
 
 		// check player's next move doesn't go off screen
-		if (right && x + SPEED <= RightWall) {
+		if (right && x + SPEED <= RightWall - scaledWidth) {
 			x += SPEED;
 		}
 

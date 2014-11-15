@@ -117,7 +117,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		if (!cloakTimerRunning) {
 			cloakTimerRunning = true;
 
-			Timer t = new Timer(r.nextInt(cloakCycle), new ActionListener() {
+			Timer c = new Timer(r.nextInt(cloakCycle), new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -127,8 +127,8 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 				}
 			});
 
-			t.setRepeats(false);
-			t.start();
+			c.setRepeats(false);
+			c.start();
 		}
 	}
 
@@ -137,7 +137,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		if (!fireTimerRunning) {
 			fireTimerRunning = true;
 
-			Timer t = new Timer(r.nextInt(ShotRate), new ActionListener() {
+			Timer f = new Timer(r.nextInt(ShotRate), new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -147,9 +147,8 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 				}
 			});
 
-			t.setRepeats(false);
-			t.start();
+			f.setRepeats(false);
+			f.start();
 		}
-
 	}
 }

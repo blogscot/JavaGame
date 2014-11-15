@@ -27,11 +27,16 @@ public class Aliens {
 
 	private final int ShipFreq = 20000;
 	private final int ShipInitialDelay = 30000;
-	private boolean timerRunning = false;
+	private boolean destroyerTimerRunning = false;
 	Random r = new Random();
 	Destroyer destroyer;
+	
+	private final int AsteroidFreq = 8000;
+	private final int AsteroidInitialDelay = 8000;
+	private boolean asteroidTimerRunning = false;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
+	private ArrayList<Asteroid> asteroids = new ArrayList<>();
 
 	enum GameState {
 		Active, Over
@@ -79,6 +84,7 @@ public class Aliens {
 			buildInvaderArmy();
 		}
 
+		addAsteroid();
 		addDestroyer();
 
 		// check if any invader has hit the left or right wall
@@ -99,6 +105,8 @@ public class Aliens {
 		} else {
 			destroyer.destroy();
 		}
+		
+		asteroids.stream().forEach(Asteroid::tick);
 
 		// Everybody moves. Special invaders use special abilities
 		invaders.stream().forEach(invader -> {
@@ -147,6 +155,25 @@ public class Aliens {
 					}
 				});
 
+		ListIterator<Asteroid> as = asteroids.listIterator();
+		
+		// draw asteroid first so they appear in the 'background'
+		while (as.hasNext()) {
+			Asteroid ast = as.next();
+			if (ast.isActive()) {
+				// render each asteroid if it is still on screen
+				ast.render(g);
+			} else {
+				// remove 'destroyed' asteroids
+				as.remove();
+			}
+		}
+		
+
+		if (destroyer.isActive) {
+			destroyer.render(g);
+		}
+		
 		// potentially resizing the collection so use iterators
 		while (it.hasNext()) {
 			Invader inv = it.next();
@@ -157,10 +184,6 @@ public class Aliens {
 				// remove 'destroyed' invaders
 				it.remove();
 			}
-		}
-
-		if (destroyer.isActive) {
-			destroyer.render(g);
 		}
 	}
 
@@ -173,6 +196,7 @@ public class Aliens {
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
 			invaders.clear();
+			asteroids.clear();
 			Invader.restartGame();
 			Player.restartGame();
 			destroyer.restartGame();
@@ -205,20 +229,41 @@ public class Aliens {
 
 	public void addDestroyer() {
 
-		if (!timerRunning) {
-			timerRunning = true;
+		if (!destroyerTimerRunning) {
+			destroyerTimerRunning = true;
 
 			Timer t = new Timer(r.nextInt(ShipFreq), new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					timerRunning = false;
+					destroyerTimerRunning = false;
 					destroyer.resetPosition();
 					destroyer.isActive = true;
 				}
 			});
 
 			t.setInitialDelay(ShipInitialDelay);
+			t.setRepeats(false);
+			t.start();
+		}
+	}
+	
+	public void addAsteroid() {
+
+		if (!asteroidTimerRunning) {
+			asteroidTimerRunning = true;
+
+			Timer t = new Timer(r.nextInt(AsteroidFreq), new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					asteroidTimerRunning = false;
+					int width = (int)(getScreenDimension().getWidth()) - scaledWidth;
+					asteroids.add(new Asteroid(manager, new Point((r.nextInt(width)), 0)));
+				}
+			});
+
+			t.setInitialDelay(AsteroidInitialDelay);
 			t.setRepeats(false);
 			t.start();
 		}
