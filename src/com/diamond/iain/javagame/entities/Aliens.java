@@ -22,8 +22,10 @@ public class Aliens {
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
 
-	Point startGamePosition = new Point(360, 400);
-	Font f = new Font("Dialog", Font.PLAIN, 32);
+	Point openingMessagePosition = new Point(260, 260);
+	Point startGamePosition = new Point(400, 400);
+	Font basic = new Font("Dialog", Font.PLAIN, 32);
+	Font grande = new Font("Dialog", Font.PLAIN, 100);
 
 	private final int ShipFreq = 20000;
 	private final int ShipInitialDelay = 30000;
@@ -221,7 +223,10 @@ public class Aliens {
 	}
 
 	private void displayStartGame(Graphics g) {
-		g.setFont(f);
+		g.setFont(grande);
+		g.setColor(Color.cyan);
+		g.drawString("Space Invaders", openingMessagePosition.x, openingMessagePosition.y);
+		g.setFont(basic);
 		g.setColor(Color.white);
 		g.drawString("Press 's' to start a new game.", startGamePosition.x,
 				startGamePosition.y);
