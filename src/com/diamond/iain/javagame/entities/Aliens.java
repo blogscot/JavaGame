@@ -21,10 +21,10 @@ public class Aliens {
 	private Point anchor = new Point(30, 50);
 	private final int numOfInvaders = 11;
 	private final SpriteManager manager;
-	
-	Point GameOverPosition = new Point(360, 400);
+
+	Point startGamePosition = new Point(360, 400);
 	Font f = new Font("Dialog", Font.PLAIN, 32);
-	
+
 	private final int ShipFreq = 20000;
 	private final int ShipInitialDelay = 30000;
 	private boolean timerRunning = false;
@@ -52,14 +52,13 @@ public class Aliens {
 
 		if (isGameOver())
 			return;
-		
+
 		// Check if player has lost all their lives
 		// e.g. shot by invader missiles
-		if (!Player.isAlive()) 
-			{
-				gameState = GameState.Over;
-				return;
-			}
+		if (!Player.isAlive()) {
+			gameState = GameState.Over;
+			return;
+		}
 
 		// Check if the game is about to be over
 		invaders.stream().forEach(invader -> {
@@ -79,7 +78,7 @@ public class Aliens {
 			Player.levelUp();
 			buildInvaderArmy();
 		}
-		
+
 		addDestroyer();
 
 		// check if any invader has hit the left or right wall
@@ -91,9 +90,9 @@ public class Aliens {
 				break;
 			}
 		}
-		
+
 		// check if destroyer is still on the screen
-		if (destroyer.isActive && destroyer.getPosition().getX() < RightWall){
+		if (destroyer.isActive && destroyer.getPosition().getX() < RightWall) {
 			destroyer.cloak();
 			destroyer.fire();
 			destroyer.tick();
@@ -115,7 +114,7 @@ public class Aliens {
 	public void render(Graphics g) {
 
 		if (isGameOver()) {
-			displayGameOver(g);
+			displayStartGame(g);
 			return;
 		}
 
@@ -124,22 +123,29 @@ public class Aliens {
 		ListIterator<Invader> it = invaders.listIterator();
 
 		// Collision detection
-		missiles.stream().forEach(missile -> {
-			invaders.stream().forEach(invader -> {
-				if (invader.getBounds().intersects(missile.getBounds())) {
-					Player.addScore(invader.getScore());
-					invader.destroy();
-					missile.destroy();
-				}
-			});
-			
-			if(destroyer.getBounds().intersects(missile.getBounds())){
-				Player.addScore(destroyer.getScore());
-				destroyer.destroy();
-				missile.destroy();
-			}
-		});
-		
+		missiles.stream().forEach(
+				missile -> {
+					invaders.stream().forEach(
+							invader -> {
+								// a missile should kill one invader only
+								if (missile.isActive()
+										&& invader.getBounds().intersects(
+												missile.getBounds())) {
+									Player.addScore(invader.getScore());
+									invader.destroy();
+									missile.destroy();
+								}
+							});
+					
+					// hitting a destroyed ship should yield no further points
+					if (destroyer.isActive()
+							&& destroyer.getBounds().intersects(
+									missile.getBounds())) {
+						Player.addScore(destroyer.getScore());
+						destroyer.destroy();
+						missile.destroy();
+					}
+				});
 
 		// potentially resizing the collection so use iterators
 		while (it.hasNext()) {
@@ -152,8 +158,8 @@ public class Aliens {
 				it.remove();
 			}
 		}
-		
-		if (destroyer.isActive){
+
+		if (destroyer.isActive) {
 			destroyer.render(g);
 		}
 	}
@@ -161,7 +167,8 @@ public class Aliens {
 	/**
 	 * The user can restart the game using a key press
 	 * 
-	 * @param restart  true to restart
+	 * @param restart
+	 *            true to restart
 	 */
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
@@ -171,7 +178,7 @@ public class Aliens {
 			destroyer.restartGame();
 			buildInvaderArmy();
 			// Key presses are asynchronous so make sure the invader
-			// army is finished construction before starting the game for real, 
+			// army is finished construction before starting the game for real,
 			// comparing list + modifying list simultaneously = BAD! see tick()
 			gameState = GameState.Active;
 		}
@@ -189,14 +196,13 @@ public class Aliens {
 		return gameState == GameState.Over;
 	}
 
-	private void displayGameOver(Graphics g) {
+	private void displayStartGame(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);
-		g.drawString("Press 's' to start a new game.", GameOverPosition.x,
-				GameOverPosition.y);
+		g.drawString("Press 's' to start a new game.", startGamePosition.x,
+				startGamePosition.y);
 	}
 
-	
 	public void addDestroyer() {
 
 		if (!timerRunning) {
@@ -217,6 +223,7 @@ public class Aliens {
 			t.start();
 		}
 	}
+
 	/**
 	 * Build a new army
 	 */

@@ -143,7 +143,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 				public void actionPerformed(ActionEvent arg0) {
 					fireTimerRunning = false;
 					missiles.add(new InvaderMissile(manager, new Point(x
-							+ width / 2, y)));
+							+ width / 2, y + height)));
 				}
 			});
 
