@@ -32,7 +32,7 @@ public class Aliens {
 	private boolean destroyerTimerRunning = false;
 	Random r = new Random();
 	Destroyer destroyer;
-	
+
 	private final int AsteroidFreq = 8000;
 	private final int AsteroidInitialDelay = 8000;
 	private boolean asteroidTimerRunning = false;
@@ -61,7 +61,8 @@ public class Aliens {
 			return;
 
 		// Check if player has lost all their lives
-		// e.g. shot by invader missiles
+		// e.g. shot by invader missiles or hit
+		// by asteroids
 		if (!Player.isAlive()) {
 			gameState = GameState.Over;
 			return;
@@ -99,15 +100,15 @@ public class Aliens {
 			}
 		}
 
-		// check if destroyer is still on the screen
-		if (destroyer.isActive && destroyer.getPosition().getX() < RightWall) {
+		// check if destroyer is alive and still on the screen
+		if (destroyer.active && destroyer.getPosition().getX() < RightWall) {
 			destroyer.cloak();
 			destroyer.fire();
 			destroyer.tick();
 		} else {
 			destroyer.destroy();
 		}
-		
+
 		asteroids.stream().forEach(Asteroid::tick);
 
 		// Everybody moves. Special invaders use special abilities
@@ -135,18 +136,27 @@ public class Aliens {
 		// Collision detection
 		missiles.stream().forEach(
 				missile -> {
-					invaders.stream().forEach(
-							invader -> {
-								// a missile should kill one invader only
-								if (missile.isActive()
-										&& invader.getBounds().intersects(
+					invaders.stream().forEach(invader -> {
+						// a missile should kill one invader only
+							if (missile.isActive()
+									&& invader.getBounds().intersects(
+											missile.getBounds())) {
+								Player.addScore(invader.getScore());
+								invader.destroy();
+								missile.destroy();
+							}
+						});
+					
+					asteroids.stream().forEach(
+							asteroid -> {
+								if (asteroid.isActive()
+										&& asteroid.getBounds().intersects(
 												missile.getBounds())) {
-									Player.addScore(invader.getScore());
-									invader.destroy();
+									asteroid.destroy();
 									missile.destroy();
 								}
 							});
-					
+
 					// hitting a destroyed ship should yield no further points
 					if (destroyer.isActive()
 							&& destroyer.getBounds().intersects(
@@ -158,7 +168,7 @@ public class Aliens {
 				});
 
 		ListIterator<Asteroid> as = asteroids.listIterator();
-		
+
 		// draw asteroid first so they appear in the 'background'
 		while (as.hasNext()) {
 			Asteroid ast = as.next();
@@ -170,12 +180,11 @@ public class Aliens {
 				as.remove();
 			}
 		}
-		
 
-		if (destroyer.isActive) {
+		if (destroyer.active) {
 			destroyer.render(g);
 		}
-		
+
 		// potentially resizing the collection so use iterators
 		while (it.hasNext()) {
 			Invader inv = it.next();
@@ -225,7 +234,8 @@ public class Aliens {
 	private void displayStartGame(Graphics g) {
 		g.setFont(grande);
 		g.setColor(Color.cyan);
-		g.drawString("Space Invaders", openingMessagePosition.x, openingMessagePosition.y);
+		g.drawString("Space Invaders", openingMessagePosition.x,
+				openingMessagePosition.y);
 		g.setFont(basic);
 		g.setColor(Color.white);
 		g.drawString("Press 's' to start a new game.", startGamePosition.x,
@@ -243,7 +253,7 @@ public class Aliens {
 				public void actionPerformed(ActionEvent arg0) {
 					destroyerTimerRunning = false;
 					destroyer.resetPosition();
-					destroyer.isActive = true;
+					destroyer.active = true;
 				}
 			});
 
@@ -252,7 +262,7 @@ public class Aliens {
 			t.start();
 		}
 	}
-	
+
 	public void addAsteroid() {
 
 		if (!asteroidTimerRunning) {
@@ -263,8 +273,10 @@ public class Aliens {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					asteroidTimerRunning = false;
-					int width = (int)(getScreenDimension().getWidth()) - scaledWidth;
-					asteroids.add(new Asteroid(manager, new Point((r.nextInt(width)), 0)));
+					int width = (int) (getScreenDimension().getWidth())
+							- scaledWidth;
+					asteroids.add(new Asteroid(manager, new Point((r
+							.nextInt(width)), 0)));
 				}
 			});
 

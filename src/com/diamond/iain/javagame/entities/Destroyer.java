@@ -27,7 +27,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 	private final int cloakDuration = 3000;
 	private boolean cloakEngaged = false;
 	private boolean fireTimerRunning = false;
-	private final int ShotRate = 10000;
+	private final int ShotRate = 4000;
 	Player player = Game.getPlayer();
 
 	private final Point p = new Point(0, 50);
@@ -40,7 +40,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		y = p.y;
 		this.manager = manager;
 		this.ship = manager.destroyer;
-		isActive = false;
+		active = false;
 
 		score = 200;
 
@@ -108,7 +108,7 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 
 	public void restartGame() {
 		resetPosition();
-		isActive = false;
+		active = false;
 	}
 
 	@Override

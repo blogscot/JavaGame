@@ -15,7 +15,7 @@ public abstract class Ship implements Tile {
 	private static final int SPEED = 2;
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
-	protected boolean isActive = true;
+	protected boolean active = true;
 	protected static final int width = scaledWidth * 2;
 	protected static final int height = scaledHeight;
 
@@ -39,12 +39,12 @@ public abstract class Ship implements Tile {
 
 	@Override
 	public void destroy() {
-		isActive = false;
+		active = false;
 	}
 
 	@Override
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
 	@Override
