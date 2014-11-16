@@ -1,6 +1,10 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
+import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
+import static com.diamond.iain.javagame.utils.GameConstants.getSpacingDimension;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,7 +34,9 @@ public class Aliens {
 	private final int ShipFreq = 20000;
 	private final int ShipInitialDelay = 30000;
 	private boolean destroyerTimerRunning = false;
+	private boolean bossDefeated = false;
 	Random r = new Random();
+	Mothership mothership;
 	Destroyer destroyer;
 
 	private final int AsteroidFreq = 8000;
@@ -53,9 +59,12 @@ public class Aliens {
 	public Aliens(SpriteManager manager) {
 		this.manager = manager;
 		destroyer = new Destroyer(manager);
+		mothership = new Mothership(manager);
 	}
 
 	public void tick() {
+
+		double pos;
 
 		if (isGameOver())
 			return;
@@ -80,11 +89,25 @@ public class Aliens {
 				}
 			}
 		});
+		
+		if (mothership.isActive() && mothership.reachedPlayer()){
+			mothership.destroy();
+			Player.losesOneLife();
+			if (!Player.isAlive()){
+				gameState = GameState.Over;
+				return;
+			}
+		}
 
 		if (isArmyDefeated() && !destroyer.isActive()) {
-			Invader.levelUp();
-			Player.levelUp();
-			buildInvaderArmy();
+			if (!bossDefeated) {
+				mothership.setActive();
+			} else {
+				bossDefeated = false;
+				Invader.levelUp();
+				Player.levelUp();
+				buildInvaderArmy();
+			}
 		}
 
 		addAsteroid();
@@ -92,7 +115,7 @@ public class Aliens {
 
 		// check if any invader has hit the left or right wall
 		for (Invader invader : invaders) {
-			double pos = invader.getPosition().getX();
+			pos = invader.getPosition().getX();
 			if (pos + invader.getWidth() > RightWall || pos < LeftWall) {
 				invader.reverseDirection();
 				invaders.stream().forEach(Invader::moveDown);
@@ -100,12 +123,24 @@ public class Aliens {
 			}
 		}
 
+		// check if mother-ship is alive and still on the screen
+		if (mothership.isActive()) {
+			pos = mothership.getPosition().getX();
+			if (pos + mothership.getWidth() > RightWall || pos < LeftWall) {
+				mothership.reverseDirection();
+				mothership.moveDown();
+			}
+			mothership.fire();
+			mothership.tick();
+		}
+
 		// check if destroyer is alive and still on the screen
-		if (destroyer.active && destroyer.getPosition().getX() < RightWall) {
+		if (destroyer.isActive() && destroyer.getPosition().getX() < RightWall) {
 			destroyer.cloak();
 			destroyer.fire();
 			destroyer.tick();
 		} else {
+			// TO REMOVE Is this code needed?
 			destroyer.destroy();
 		}
 
@@ -133,7 +168,7 @@ public class Aliens {
 		final ArrayList<Missile> missiles = Player.getMissiles();
 		ListIterator<Invader> it = invaders.listIterator();
 
-		// Collision detection
+		// Player missiles collision detection
 		missiles.stream().forEach(
 				missile -> {
 					invaders.stream().forEach(invader -> {
@@ -146,7 +181,7 @@ public class Aliens {
 								missile.destroy();
 							}
 						});
-					
+
 					asteroids.stream().forEach(
 							asteroid -> {
 								if (asteroid.isActive()
@@ -156,6 +191,16 @@ public class Aliens {
 									missile.destroy();
 								}
 							});
+
+					if (mothership.isActive()
+							&& mothership.getBounds().intersects(
+									missile.getBounds())) {
+						Player.addScore(mothership.getScore());
+						mothership.destroy();
+						mothership.resetPosition();
+						bossDefeated = true;
+						missile.destroy();
+					}
 
 					// hitting a destroyed ship should yield no further points
 					if (destroyer.isActive()
@@ -181,7 +226,11 @@ public class Aliens {
 			}
 		}
 
-		if (destroyer.active) {
+		if (mothership.isActive()) {
+			mothership.render(g);
+		}
+
+		if (destroyer.isActive()) {
 			destroyer.render(g);
 		}
 
@@ -206,6 +255,7 @@ public class Aliens {
 	 */
 	public void restartGame(boolean restart) {
 		if (gameState == GameState.Over && restart == true) {
+			bossDefeated = false;
 			invaders.clear();
 			asteroids.clear();
 			Invader.restartGame();
@@ -253,7 +303,7 @@ public class Aliens {
 				public void actionPerformed(ActionEvent arg0) {
 					destroyerTimerRunning = false;
 					destroyer.resetPosition();
-					destroyer.active = true;
+					destroyer.setActive();
 				}
 			});
 

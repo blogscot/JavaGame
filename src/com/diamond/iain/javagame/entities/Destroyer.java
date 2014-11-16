@@ -1,14 +1,10 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
-
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.Random;
 
 import javax.swing.Timer;
 
@@ -20,22 +16,16 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 
-	private ArrayList<Missile> missiles = new ArrayList<>();
-	private SpriteManager manager;
 	private boolean cloakTimerRunning = false;
 	private final int cloakCycle = 10000;
 	private final int cloakDuration = 3000;
 	private boolean cloakEngaged = false;
-	private boolean fireTimerRunning = false;
-	private final int ShotRate = 4000;
 	Player player = Game.getPlayer();
 
-	private final Point p = new Point(0, 50);
-
-	private Random r = new Random();
 	Timer cloak;
 
 	public Destroyer(SpriteManager manager) {
+		p = new Point(0, 50);
 		x = p.x;
 		y = p.y;
 		this.manager = manager;
@@ -54,22 +44,6 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 			}
 		});
 		cloak.setRepeats(false);
-	}
-	
-	
-	@Override
-	public void tick() {
-		x += speed;
-		
-		// Move each missile if it is still on screen
-		for (Missile m : missiles) {
-			if (m.getPosition().getY() < getScreenDimension().height) {
-				m.tick();
-			} else {
-				// otherwise mark for removal from list
-				m.destroy();
-			}
-		}
 	}
 
 	@Override
@@ -101,16 +75,6 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		}
 	}
 
-	public void resetPosition() {
-		x = p.x;
-		y = p.y;
-	}
-
-	public void restartGame() {
-		resetPosition();
-		active = false;
-	}
-
 	@Override
 	public void cloak() {
 
@@ -129,26 +93,6 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 
 			c.setRepeats(false);
 			c.start();
-		}
-	}
-
-	@Override
-	public void fire() {
-		if (!fireTimerRunning) {
-			fireTimerRunning = true;
-
-			Timer f = new Timer(r.nextInt(ShotRate), new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					fireTimerRunning = false;
-					missiles.add(new InvaderMissile(manager, new Point(x
-							+ width / 2, y + height)));
-				}
-			});
-
-			f.setRepeats(false);
-			f.start();
 		}
 	}
 }
