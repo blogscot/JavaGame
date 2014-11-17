@@ -30,6 +30,8 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		y = p.y;
 		this.manager = manager;
 		this.ship = manager.destroyer;
+		startLives = 2;
+		lives = startLives;
 		active = false;
 
 		score = 200;

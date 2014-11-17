@@ -22,6 +22,8 @@ public class Mothership extends Ship implements Tile, CanFire {
 		this.manager = manager;
 		this.ship = manager.mothership;
 		speed = 4;
+		startLives = 3;
+		lives = startLives;
 		active = false;
 
 		score = 400;

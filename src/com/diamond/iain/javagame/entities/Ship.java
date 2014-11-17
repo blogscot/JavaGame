@@ -39,6 +39,8 @@ public abstract class Ship implements Tile, CanFire {
 
 	protected BufferedImage ship;
 	
+	protected int startLives = 0;
+	protected int lives = 0;
 	protected int score = 0;
 	
 	@Override
@@ -65,16 +67,24 @@ public abstract class Ship implements Tile, CanFire {
 		return score;
 	}
 
+	/**
+	 * Ships take a number of hits before being destroyed
+	 */
 	public void destroy() {
-		active = false;
+		lives -= 1;
+		if (lives <= 0)
+		{
+			active = false;
+			lives = startLives;
+		}
 	}
 
 	public boolean isActive() {
 		return active;
 	}
 	
-	public void setActive() {
-		active = true;
+	public void setActive(boolean flag) {
+		active = flag;
 	}
 
 	public Point getPosition() {
@@ -90,12 +100,14 @@ public abstract class Ship implements Tile, CanFire {
 	}
 
 	public void resetPosition() {
+		lives = startLives;
 		x = p.x;
 		y = p.y;
 	}
 
 	public void restartGame() {
 		resetPosition();
+		lives = startLives;
 		active = false;
 	}	
 	

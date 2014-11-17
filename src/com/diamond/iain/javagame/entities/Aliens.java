@@ -89,11 +89,11 @@ public class Aliens {
 				}
 			}
 		});
-		
-		if (mothership.isActive() && mothership.reachedPlayer()){
+
+		if (mothership.isActive() && mothership.reachedPlayer()) {
 			mothership.destroy();
 			Player.losesOneLife();
-			if (!Player.isAlive()){
+			if (!Player.isAlive()) {
 				gameState = GameState.Over;
 				return;
 			}
@@ -101,7 +101,7 @@ public class Aliens {
 
 		if (isArmyDefeated() && !destroyer.isActive()) {
 			if (!bossDefeated) {
-				mothership.setActive();
+				mothership.setActive(true);
 			} else {
 				bossDefeated = false;
 				Invader.levelUp();
@@ -135,13 +135,15 @@ public class Aliens {
 		}
 
 		// check if destroyer is alive and still on the screen
-		if (destroyer.isActive() && destroyer.getPosition().getX() < RightWall) {
-			destroyer.cloak();
-			destroyer.fire();
-			destroyer.tick();
-		} else {
-			// TO REMOVE Is this code needed?
-			destroyer.destroy();
+		if (destroyer.isActive()) {
+			if (destroyer.getPosition().getX() < RightWall) {
+				destroyer.cloak();
+				destroyer.fire();
+				destroyer.tick();
+			} else{
+				// gone past wall
+				destroyer.setActive(false);
+			}
 		}
 
 		asteroids.stream().forEach(Asteroid::tick);
@@ -195,20 +197,26 @@ public class Aliens {
 					if (mothership.isActive()
 							&& mothership.getBounds().intersects(
 									missile.getBounds())) {
-						Player.addScore(mothership.getScore());
 						mothership.destroy();
-						mothership.resetPosition();
-						bossDefeated = true;
 						missile.destroy();
+						// has the mother-ship been killed?
+						if (!mothership.isActive()) {
+							Player.addScore(mothership.getScore());
+							mothership.resetPosition();
+							bossDefeated = true;
+						}
 					}
 
 					// hitting a destroyed ship should yield no further points
 					if (destroyer.isActive()
 							&& destroyer.getBounds().intersects(
 									missile.getBounds())) {
-						Player.addScore(destroyer.getScore());
 						destroyer.destroy();
 						missile.destroy();
+						// has the destroyer been killed?
+						if (!destroyer.isActive()) {
+							Player.addScore(destroyer.getScore());
+						}
 					}
 				});
 
@@ -303,7 +311,7 @@ public class Aliens {
 				public void actionPerformed(ActionEvent arg0) {
 					destroyerTimerRunning = false;
 					destroyer.resetPosition();
-					destroyer.setActive();
+					destroyer.setActive(true);
 				}
 			});
 
