@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ListIterator;
 
 import javax.swing.Timer;
 
@@ -52,28 +51,6 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 	public void render(Graphics g) {
 		if (!cloakEngaged) {
 			g.drawImage(ship, x, y, width, height, null);
-		}
-		
-		// Collision detection
-		missiles.stream().forEach(missile -> {
-				if (player.getBounds().intersects(missile.getBounds())) {
-					Player.losesOneLife();
-					missile.destroy();
-				}
-		});
-		
-		// Note: use ListIterator to avoid ConcurrentModificationException
-		ListIterator<Missile> it = missiles.listIterator();
-
-		while (it.hasNext()) {
-			Missile m = it.next();
-			if (m.isActive()) {
-				// render each missile if it is still on screen
-				m.render(g);
-			} else {
-				// remove 'destroyed' missiles
-				it.remove();
-			}
 		}
 	}
 

@@ -4,7 +4,6 @@ import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
 
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ListIterator;
 
 import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
@@ -29,32 +28,9 @@ public class Mothership extends Ship implements Tile, CanFire {
 		score = 400;
 	}
 	
-	
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(ship, x, y, width, height, null);
-		
-		// Collision detection
-		missiles.stream().forEach(missile -> {
-				if (player.getBounds().intersects(missile.getBounds())) {
-					Player.losesOneLife();
-					missile.destroy();
-				}
-		});
-		
-		// Note: use ListIterator to avoid ConcurrentModificationException
-		ListIterator<Missile> it = missiles.listIterator();
-
-		while (it.hasNext()) {
-			Missile m = it.next();
-			if (m.isActive()) {
-				// render each missile if it is still on screen
-				m.render(g);
-			} else {
-				// remove 'destroyed' missiles
-				it.remove();
-			}
-		}
 	}
 		
 	public void reverseDirection() {
@@ -67,9 +43,10 @@ public class Mothership extends Ship implements Tile, CanFire {
 	
 	/**
 	 * 
-	 * @return true when the invader reaches the player's position
+	 * @return true when the invader reaches the bottom of the screen
 	 */
 	public boolean reachedPlayer() {
-		return y >= playerYPos;
+		// bottom of ship is 'lower than' top of player
+		return y + height >= playerYPos;
 	}
 }

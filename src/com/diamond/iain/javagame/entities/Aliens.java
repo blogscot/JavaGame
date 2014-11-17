@@ -18,6 +18,7 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
+import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 
 public class Aliens {
@@ -44,7 +45,11 @@ public class Aliens {
 	private boolean asteroidTimerRunning = false;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
+
+	private ArrayList<Missile> enemyMissiles = new ArrayList<>();
 	private ArrayList<Asteroid> asteroids = new ArrayList<>();
+	
+	Player player = Game.getPlayer();
 
 	enum GameState {
 		Active, Over
@@ -122,6 +127,16 @@ public class Aliens {
 				break;
 			}
 		}
+		
+		// Move each enemy missile if it is still on screen
+		for (Missile m : enemyMissiles) {
+			if (m.getPosition().getY() < getScreenDimension().height) {
+				m.tick();
+			} else {
+				// otherwise mark for removal from list
+				m.destroy();
+			}
+		}
 
 		// check if mother-ship is alive and still on the screen
 		if (mothership.isActive()) {
@@ -140,7 +155,7 @@ public class Aliens {
 				destroyer.cloak();
 				destroyer.fire();
 				destroyer.tick();
-			} else{
+			} else {
 				// gone past wall
 				destroyer.setActive(false);
 			}
@@ -219,6 +234,29 @@ public class Aliens {
 						}
 					}
 				});
+		
+		
+		// Enemy Missile Collision detection
+		enemyMissiles.stream().forEach(missile -> {
+				if (player.getBounds().intersects(missile.getBounds())) {
+					Player.losesOneLife();
+					missile.destroy();
+				}
+		});
+		
+		// Note: use ListIterator to avoid ConcurrentModificationException
+		ListIterator<Missile> en = enemyMissiles.listIterator();
+
+		while (en.hasNext()) {
+			Missile m = en.next();
+			if (m.isActive()) {
+				// render each missile if it is still on screen
+				m.render(g);
+			} else {
+				// remove 'destroyed' missiles
+				en.remove();
+			}
+		}
 
 		ListIterator<Asteroid> as = asteroids.listIterator();
 
@@ -275,6 +313,10 @@ public class Aliens {
 			// comparing list + modifying list simultaneously = BAD! see tick()
 			gameState = GameState.Active;
 		}
+	}
+
+	public void addMissile(Point p) {
+		enemyMissiles.add(new InvaderMissile(manager, new Point(p.x, p.y)));
 	}
 
 	/**

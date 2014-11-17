@@ -73,10 +73,11 @@ public abstract class Invader implements Tile {
 
 	/**
 	 * 
-	 * @return true when the invader reaches the player's position
+	 * @return true when the invader reaches the bottom of the screen
 	 */
 	public boolean reachedPlayer() {
-		return y >= playerYPos;
+		// bottom of invader is 'lower than' top of player
+		return y + height >= playerYPos;
 	}
 
 	@Override
