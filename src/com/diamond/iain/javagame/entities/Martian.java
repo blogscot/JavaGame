@@ -55,7 +55,7 @@ public class Martian extends Invader implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					timerRunning = false;
-					Game.getAliens().addMissile(new Point(x + width / 2, y + height));
+					Game.getAliens().addMissile(new Point(x, y + height));
 				}
 			});
 
