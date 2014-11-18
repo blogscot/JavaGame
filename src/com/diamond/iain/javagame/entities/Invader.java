@@ -16,7 +16,7 @@ public abstract class Invader implements Tile {
 	private static final int SPEED = 2; // the start speed
 	protected static int speed = SPEED; // speed also controls direction
 	protected int x = 0, y = 0;
-	protected boolean isActive = true;
+	protected boolean active = true;
 	protected static final int width = scaledWidth;
 	protected static final int height = scaledHeight;
 
@@ -87,11 +87,11 @@ public abstract class Invader implements Tile {
 
 	@Override
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
 	@Override
 	public void destroy() {
-		isActive = false;
+		active = false;
 	}
 }

@@ -1,6 +1,12 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
+import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
+import static com.diamond.iain.javagame.utils.GameConstants.missileYPos;
+import static com.diamond.iain.javagame.utils.GameConstants.playerYPos;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledHeight;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,9 +14,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.ListIterator;
 
+import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 import com.diamond.iain.javagame.utils.FileIOManager;
@@ -38,13 +43,11 @@ public class Player implements Tile {
 
 	long lastPressed = System.currentTimeMillis();
 
-	private static ArrayList<Missile> missiles = new ArrayList<>();
-
-	public Player(SpriteManager manager) {
+	public Player(SpriteManager spriteManager) {
 		this.x = 30;
 		this.y = playerYPos;
-		this.player = manager.player;
-		this.manager = manager;
+		this.player = spriteManager.player;
+		manager = spriteManager;
 		highScore = FileIOManager.readHighScoreFromFile();
 		f = new Font("Dialog", Font.PLAIN, 18);
 
@@ -62,16 +65,6 @@ public class Player implements Tile {
 		if (right && x + SPEED <= RightWall - scaledWidth) {
 			x += SPEED;
 		}
-
-		// Move each missile if it is still on screen
-		for (Missile m : missiles) {
-			if (m.getPosition().getY() > TopWall) {
-				m.tick();
-			} else {
-				// otherwise mark for removal from list
-				m.destroy();
-			}
-		}
 	}
 
 	@Override
@@ -79,22 +72,7 @@ public class Player implements Tile {
 
 		updateScore(g);
 
-		// draw Player
 		g.drawImage(player, x, y, scaledWidth, scaledHeight, null);
-
-		// Note: use ListIterator to avoid ConcurrentModificationException
-		ListIterator<Missile> it = missiles.listIterator();
-
-		while (it.hasNext()) {
-			Missile m = it.next();
-			if (m.isActive()) {
-				// render each missile if it is still on screen
-				m.render(g);
-			} else {
-				// remove 'destroyed' missiles
-				it.remove();
-			}
-		}
 	}
 
 	public static void restartGame() {
@@ -147,8 +125,7 @@ public class Player implements Tile {
 		// Avoid the machine gun effect
 		if (fire && duration > 600) {
 			// create new missile at player's x position
-			missiles.add(new PlayerMissile(manager, new Point(this.x,
-					missileYPos)));
+			Game.getAliens().addPlayerMissile(new Point(x, missileYPos));
 			lastPressed = System.currentTimeMillis();
 		}
 	}
@@ -161,14 +138,6 @@ public class Player implements Tile {
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, scaledWidth, scaledHeight);
-	}
-
-	/**
-	 * 
-	 * @return an immutable copy of missiles
-	 */
-	public static final ArrayList<Missile> getMissiles() {
-		return missiles;
 	}
 
 	// stub

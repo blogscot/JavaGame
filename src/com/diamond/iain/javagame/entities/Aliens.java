@@ -1,10 +1,6 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
-import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
-import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
-import static com.diamond.iain.javagame.utils.GameConstants.getSpacingDimension;
-import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
+import static com.diamond.iain.javagame.utils.GameConstants.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -46,6 +42,7 @@ public class Aliens {
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
+	private ArrayList<Missile> playerMissiles = new ArrayList<>();
 	private ArrayList<Missile> enemyMissiles = new ArrayList<>();
 	private ArrayList<Asteroid> asteroids = new ArrayList<>();
 	
@@ -128,6 +125,26 @@ public class Aliens {
 			}
 		}
 		
+		// Everybody moves. Special invaders use special abilities
+		invaders.stream().forEach(invader -> {
+			if (invader instanceof Martian) {
+				((Martian) invader).fire();
+			} else if (invader instanceof Mercurian) {
+				((Mercurian) invader).cloak();
+			}
+			invader.tick();
+		});
+		
+		// Move each player missile if it is still on screen
+		for (Missile m : playerMissiles) {
+			if (m.getPosition().getY() > TopWall) {
+				m.tick();
+			} else {
+				// otherwise mark for removal from list
+				m.destroy();
+			}
+		}
+		
 		// Move each enemy missile if it is still on screen
 		for (Missile m : enemyMissiles) {
 			if (m.getPosition().getY() < getScreenDimension().height) {
@@ -162,16 +179,6 @@ public class Aliens {
 		}
 
 		asteroids.stream().forEach(Asteroid::tick);
-
-		// Everybody moves. Special invaders use special abilities
-		invaders.stream().forEach(invader -> {
-			if (invader instanceof Martian) {
-				((Martian) invader).fire();
-			} else if (invader instanceof Mercurian) {
-				((Mercurian) invader).cloak();
-			}
-			invader.tick();
-		});
 	}
 
 	public void render(Graphics g) {
@@ -181,12 +188,8 @@ public class Aliens {
 			return;
 		}
 
-		// We don't intend to change missiles so make it immutable
-		final ArrayList<Missile> missiles = Player.getMissiles();
-		ListIterator<Invader> it = invaders.listIterator();
-
 		// Player missiles collision detection
-		missiles.stream().forEach(
+		playerMissiles.stream().forEach(
 				missile -> {
 					invaders.stream().forEach(invader -> {
 						// a missile should kill one invader only
@@ -244,7 +247,19 @@ public class Aliens {
 				}
 		});
 		
-		// Note: use ListIterator to avoid ConcurrentModificationException
+		ListIterator<Missile> pl = playerMissiles.listIterator();
+
+		while (pl.hasNext()) {
+			Missile m = pl.next();
+			if (m.isActive()) {
+				// render each missile if it is still on screen
+				m.render(g);
+			} else {
+				// remove 'destroyed' missiles
+				pl.remove();
+			}
+		}
+		
 		ListIterator<Missile> en = enemyMissiles.listIterator();
 
 		while (en.hasNext()) {
@@ -279,16 +294,17 @@ public class Aliens {
 		if (destroyer.isActive()) {
 			destroyer.render(g);
 		}
-
-		// potentially resizing the collection so use iterators
-		while (it.hasNext()) {
-			Invader inv = it.next();
+		
+		ListIterator<Invader> in = invaders.listIterator();
+		
+		while (in.hasNext()) {
+			Invader inv = in.next();
 			if (inv.isActive()) {
 				// render each invader if it is still on screen
 				inv.render(g);
 			} else {
 				// remove 'destroyed' invaders
-				it.remove();
+				in.remove();
 			}
 		}
 	}
@@ -315,8 +331,12 @@ public class Aliens {
 		}
 	}
 
-	public void addMissile(Point p) {
+	public void addEnemyMissile(Point p) {
 		enemyMissiles.add(new InvaderMissile(manager, new Point(p.x, p.y)));
+	}
+	
+	public void addPlayerMissile(Point p) {
+		playerMissiles.add(new PlayerMissile(manager, new Point(p.x, p.y)));
 	}
 
 	/**

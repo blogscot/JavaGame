@@ -36,6 +36,7 @@ public abstract class Ship implements Tile, CanFire {
 	private boolean fireTimerRunning = false;
 	private final int ShotRate = 4000;
 	protected Random r = new Random();
+	Timer t;
 
 	protected BufferedImage ship;
 
@@ -74,6 +75,9 @@ public abstract class Ship implements Tile, CanFire {
 
 	public void setActive(boolean flag) {
 		active = flag;
+		if (!active) {
+			t.stop();
+		}
 	}
 
 	public Point getPosition() {
@@ -89,6 +93,9 @@ public abstract class Ship implements Tile, CanFire {
 	}
 
 	public void resetPosition() {
+		if (t != null && t.isRunning()){
+			t.stop();
+		}
 		lives = startLives;
 		x = p.x;
 		y = p.y;
@@ -106,17 +113,18 @@ public abstract class Ship implements Tile, CanFire {
 		if (!fireTimerRunning) {
 			fireTimerRunning = true;
 
-			Timer f = new Timer(r.nextInt(ShotRate), new ActionListener() {
+			t = new Timer(r.nextInt(ShotRate), new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					fireTimerRunning = false;
-					Game.getAliens().addMissile(new Point(x + width / 2, y + height));
+					//debug: if (!isActive()) System.out.println("Ship firing @"+x+","+y);
+					Game.getAliens().addEnemyMissile(new Point(x + width / 2, y + height));
 				}
 			});
 
-			f.setRepeats(false);
-			f.start();
+			t.setRepeats(false);
+			t.start();
 		}
 	}
 }
