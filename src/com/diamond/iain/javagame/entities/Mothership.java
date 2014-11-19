@@ -30,7 +30,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 	
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(ship, x, y, width, height, null);
+		g.drawImage(ship, x, y, BossWidth, BossHeight, null);
 	}
 		
 	public void reverseDirection() {
