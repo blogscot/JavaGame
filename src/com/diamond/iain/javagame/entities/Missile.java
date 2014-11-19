@@ -10,6 +10,15 @@ import java.awt.image.BufferedImage;
 
 import com.diamond.iain.javagame.tiles.Tile;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This abstract class is the base class for each Missile type:
+ * PlayerMissile and InvaderMissile.
+ *
+ */
+
 public abstract class Missile implements Tile {
 	
 	protected final int SPEED = 5;

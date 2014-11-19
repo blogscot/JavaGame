@@ -5,6 +5,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * Loads and returns the Sprite Sheet
+ *
+ */
+
 public class ImageLoader {
 	
 	public BufferedImage load(String path){

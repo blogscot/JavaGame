@@ -19,6 +19,15 @@ import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.CanFire;
 import com.diamond.iain.javagame.tiles.Tile;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This abstract class is the base class for each Ship type:
+ * Destroyer and Mothership.
+ *
+ */
+
 public abstract class Ship implements Tile, CanFire {
 
 	private static final int SPEED = 2;

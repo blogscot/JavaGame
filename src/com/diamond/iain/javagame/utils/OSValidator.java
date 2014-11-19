@@ -1,5 +1,10 @@
 package com.diamond.iain.javagame.utils;
 
+/**
+ * 
+ * @author This class provides methods to detect the current OS
+ *
+ */
 public class OSValidator {
 
 	private static String OS = System.getProperty("os.name").toLowerCase();

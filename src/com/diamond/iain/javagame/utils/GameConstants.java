@@ -3,6 +3,14 @@ package com.diamond.iain.javagame.utils;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This class contains the shared game constants 
+ *
+ */
+
 public class GameConstants {
 
 	private static final int MacXSpacing = 55;

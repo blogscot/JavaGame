@@ -1,5 +1,15 @@
 package com.diamond.iain.javagame;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This is the framework class for the Space Invaders game.
+ * It contains the outer shell for the game frame / panel, plus
+ * generates regular ticks (moves) and renders (draws) for both
+ * player and enemies.
+ *
+ */
 
 import java.awt.Canvas;
 import java.awt.Color;

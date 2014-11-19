@@ -11,6 +11,15 @@ import java.awt.image.BufferedImage;
 
 import com.diamond.iain.javagame.tiles.Tile;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This abstract class is the base class for each Invader type:
+ * Martian, Mercurian, Plutonian and Venusian.
+ *
+ */
+
 public abstract class Invader implements Tile {
 
 	private static final int SPEED = 2; // the start speed
@@ -76,7 +85,8 @@ public abstract class Invader implements Tile {
 	 * @return true when the invader reaches the bottom of the screen
 	 */
 	public boolean reachedPlayer() {
-		// bottom of invader is 'lower than' top of player
+		// true when bottom of invader is 'lower than' top of player,
+		// as it appear on-screen
 		return y + height >= playerYPos;
 	}
 

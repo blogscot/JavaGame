@@ -35,11 +35,11 @@ public class Player implements Tile {
 	private static int totalScore = 0;
 	private static int highScore = 0;
 
-	Font f;
-	Point scorePosition = new Point(20, 20);
-	Point levelPosition = new Point(getScreenDimension().width / 2, 20);
-	Point livesPosition = new Point(20, getScreenDimension().height - 45);
-	Point highScorePosition = new Point(getScreenDimension().width - 200, 20);
+	private Font f;
+	private Point scorePosition = new Point(20, 20);
+	private Point levelPosition = new Point(getScreenDimension().width / 2, 20);
+	private Point livesPosition = new Point(20, getScreenDimension().height - 45);
+	private Point highScorePosition = new Point(getScreenDimension().width - 200, 20);
 
 	long lastPressed = System.currentTimeMillis();
 
@@ -116,7 +116,12 @@ public class Player implements Tile {
 	public void setLeft(boolean left) {
 		this.left = left;
 	}
-
+	
+	/**
+	 * Called when user presses the fire key, i.e. space bar
+	 * 
+	 * @param fire true when fire pressed down
+	 */
 	public void firePressed(boolean fire) {
 
 		long now = System.currentTimeMillis();
@@ -146,6 +151,10 @@ public class Player implements Tile {
 		return false;
 	}
 
+	/**
+	 * Updates the number of player lives, starts at 3.
+	 * Note: the displayed value must never be negative.
+	 */
 	public static void losesOneLife() {
 		lives = lives > 0 ? lives -= 1 : 0;
 	}
@@ -154,6 +163,9 @@ public class Player implements Tile {
 		return lives > 0;
 	}
 
+	/**
+	 * The Player Tile has been hit
+	 */
 	@Override
 	public void destroy() {
 		lives -= 1;

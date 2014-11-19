@@ -7,6 +7,14 @@ import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.entities.Aliens;
 import com.diamond.iain.javagame.entities.Player;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * The player's key presses are detected and sent to the interested client
+ *
+ */
+
 public class KeyManager implements KeyListener {
 
 	Player player = Game.getPlayer();

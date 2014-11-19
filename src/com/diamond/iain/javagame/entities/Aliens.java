@@ -23,6 +23,17 @@ import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 
+/**
+ * 
+ * @author Iain Diamond
+ * 
+ * This is the controller class for the Space Invaders game.
+ * It constructs the invader army, hold collections for Player
+ * Enemy missiles, plus asteroids; moves / renders them while 
+ * on-screen, and removes them if destroyed or go off-screen. 
+ *
+ */
+
 public class Aliens {
 
 	private Point anchor = new Point(30, 50);

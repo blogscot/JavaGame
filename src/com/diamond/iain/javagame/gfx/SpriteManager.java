@@ -4,6 +4,13 @@ import java.awt.image.BufferedImage;
 
 import static com.diamond.iain.javagame.utils.GameConstants.*;
 
+/**
+ * 
+ * @author Iain Diamond
+ *
+ * Splits the Sprite sheet into individual BufferedImages
+ */
+
 public class SpriteManager {
 	
 	public BufferedImage martian;
