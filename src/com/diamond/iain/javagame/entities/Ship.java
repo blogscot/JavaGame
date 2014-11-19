@@ -34,8 +34,9 @@ public abstract class Ship implements Tile, CanFire {
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean active = true;
-	protected static final int width = scaledWidth * 2;
-	protected static final int height = scaledHeight;
+	private static final double BossScalingFactor = 1.5;
+	protected static final int width = (int)(scaledWidth * 2 * BossScalingFactor);
+	protected static final int height = (int)(scaledHeight * BossScalingFactor);
 
 	protected Point p;
 
