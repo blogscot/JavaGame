@@ -237,7 +237,7 @@ public class Aliens {
 						// has the mother-ship been killed?
 						if (!mothership.isActive()) {
 							Player.addScore(mothership.getScore());
-							mothership.resetPosition();
+							mothership.reset();
 							bossDefeated = true;
 						}
 					}
@@ -368,7 +368,7 @@ public class Aliens {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					destroyerTimerRunning = false;
-					destroyer.resetPosition();
+					destroyer.reset();
 					destroyer.setActive(true);
 				}
 			});

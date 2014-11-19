@@ -101,17 +101,24 @@ public abstract class Ship implements Tile, CanFire {
 		return new Rectangle(x, y, width, height);
 	}
 
-	public void resetPosition() {
+	/**
+	 * Resets the ship's position, direction and firing timers.
+	 * 
+	 */
+	public void reset() {
 		if (t != null && t.isRunning()){
 			t.stop();
 		}
 		lives = startLives;
+		
+		// Always start moving left to right
+		speed = Math.abs(speed);
 		x = p.x;
 		y = p.y;
 	}
 
 	public void restartGame() {
-		resetPosition();
+		reset();
 		lives = startLives;
 		active = false;
 	}
