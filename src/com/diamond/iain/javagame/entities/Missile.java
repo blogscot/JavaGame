@@ -22,7 +22,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 public abstract class Missile implements Tile {
 	
 	protected final int SPEED = 5;
-	private final int xOffset = 25;
+	private final int xOffset = 15;
 	private final int yOffset = 10;
 	private final int missileWidth = 6;
 	private final int missileHeight = 22;

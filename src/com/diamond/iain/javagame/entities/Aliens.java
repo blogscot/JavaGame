@@ -310,7 +310,7 @@ public class Aliens {
 	 *            true to restart
 	 */
 	public void restartGame(boolean restart) {
-		if (gameState == GameState.Over && restart == true) {
+		if (isGameOver() && restart == true) {
 			bossDefeated = false;
 			invaders.clear();
 			asteroids.clear();
