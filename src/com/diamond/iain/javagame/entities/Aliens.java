@@ -1,6 +1,11 @@
 package com.diamond.iain.javagame.entities;
 
-import static com.diamond.iain.javagame.utils.GameConstants.*;
+import static com.diamond.iain.javagame.utils.GameConstants.LeftWall;
+import static com.diamond.iain.javagame.utils.GameConstants.RightWall;
+import static com.diamond.iain.javagame.utils.GameConstants.TopWall;
+import static com.diamond.iain.javagame.utils.GameConstants.getScreenDimension;
+import static com.diamond.iain.javagame.utils.GameConstants.getSpacingDimension;
+import static com.diamond.iain.javagame.utils.GameConstants.scaledWidth;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +21,7 @@ import javax.swing.Timer;
 
 import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
+import com.diamond.iain.javagame.tiles.Tile;
 
 public class Aliens {
 
@@ -238,7 +244,7 @@ public class Aliens {
 					}
 				});
 		
-		
+
 		// Enemy Missile Collision detection
 		enemyMissiles.stream().forEach(missile -> {
 				if (player.getBounds().intersects(missile.getBounds())) {
@@ -247,45 +253,9 @@ public class Aliens {
 				}
 		});
 		
-		ListIterator<Missile> pl = playerMissiles.listIterator();
-
-		while (pl.hasNext()) {
-			Missile m = pl.next();
-			if (m.isActive()) {
-				// render each missile if it is still on screen
-				m.render(g);
-			} else {
-				// remove 'destroyed' missiles
-				pl.remove();
-			}
-		}
-		
-		ListIterator<Missile> en = enemyMissiles.listIterator();
-
-		while (en.hasNext()) {
-			Missile m = en.next();
-			if (m.isActive()) {
-				// render each missile if it is still on screen
-				m.render(g);
-			} else {
-				// remove 'destroyed' missiles
-				en.remove();
-			}
-		}
-
-		ListIterator<Asteroid> as = asteroids.listIterator();
-
-		// draw asteroid first so they appear in the 'background'
-		while (as.hasNext()) {
-			Asteroid ast = as.next();
-			if (ast.isActive()) {
-				// render each asteroid if it is still on screen
-				ast.render(g);
-			} else {
-				// remove 'destroyed' asteroids
-				as.remove();
-			}
-		}
+		processElements(g, playerMissiles);		
+		processElements(g, enemyMissiles);		
+		processElements(g, asteroids);
 
 		if (mothership.isActive()) {
 			mothership.render(g);
@@ -295,20 +265,33 @@ public class Aliens {
 			destroyer.render(g);
 		}
 		
-		ListIterator<Invader> in = invaders.listIterator();
+		processElements(g, invaders);
+
+	}
+
+	/**
+	 * Process each item in a Tiled ArrayList. This typically contains:
+	 * invaders, missiles and asteroids. Active Tiles get rendered
+	 * otherwise they are removed.
+	 * 
+	 * @param g the shared Graphics variable 
+	 * @param source An arrayList of Tile items
+	 */
+	private <X> void processElements(Graphics g, ArrayList<X> source){
+		ListIterator<X> it = source.listIterator();
 		
-		while (in.hasNext()) {
-			Invader inv = in.next();
-			if (inv.isActive()) {
-				// render each invader if it is still on screen
-				inv.render(g);
+		while (it.hasNext()){
+			Tile t = (Tile)it.next();
+			if (t.isActive()) {
+				// render each Tile if it is still on the screen
+				t.render(g);
 			} else {
-				// remove 'destroyed' invaders
-				in.remove();
+				// remove 'destroyed Tiles
+				it.remove();
 			}
 		}
 	}
-
+	
 	/**
 	 * The user can restart the game using a key press
 	 * 
@@ -324,9 +307,11 @@ public class Aliens {
 			Player.restartGame();
 			destroyer.restartGame();
 			buildInvaderArmy();
-			// Key presses are asynchronous so make sure the invader
-			// army is finished construction before starting the game for real,
-			// comparing list + modifying list simultaneously = BAD! see tick()
+			/* Key presses are asynchronous (whereas tick() is synchronous) 
+			 * so make sure the invader army is finished construction 
+			 * before starting the game for real, comparing list + modifying
+			 *  list simultaneously = BAD!
+			 */  
 			gameState = GameState.Active;
 		}
 	}
