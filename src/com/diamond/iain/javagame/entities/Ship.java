@@ -34,11 +34,8 @@ public abstract class Ship implements Tile, CanFire {
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean active = true;
-	private static final double BossScalingFactor = 1.4;
 	protected static final int width = (int)(scaledWidth * 2);
 	protected static final int height = (int)(scaledHeight);
-	protected static final int BossWidth = (int)(scaledWidth * 2 * BossScalingFactor);
-	protected static final int BossHeight = (int)(scaledHeight * BossScalingFactor);
 
 	protected Point p;
 
@@ -97,8 +94,7 @@ public abstract class Ship implements Tile, CanFire {
 	}
 
 	public int getWidth() {
-		
-		return this instanceof Destroyer ? width : BossWidth;
+		return width;
 	}
 
 	public Rectangle getBounds() {

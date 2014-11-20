@@ -22,7 +22,7 @@ public class SpriteManager {
 	public BufferedImage invaderMissile;
 	public BufferedImage destroyer;
 	public BufferedImage mothership;
-	public BufferedImage asteroid;
+	public BufferedImage meteor;
 	
 	public SpriteManager(SpriteSheet ss) {
 
@@ -42,6 +42,6 @@ public class SpriteManager {
 
 		// row 4
 		mothership     = ss.crop(0, 3, TileWidth * 2, TileHeight);
-		asteroid       = ss.crop(2, 3, TileWidth, TileHeight);
+		meteor       = ss.crop(2, 3, TileWidth, TileHeight);
 	}
 }

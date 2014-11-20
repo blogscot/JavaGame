@@ -13,19 +13,21 @@ import com.diamond.iain.javagame.Game;
 import com.diamond.iain.javagame.gfx.SpriteManager;
 import com.diamond.iain.javagame.tiles.Tile;
 
-public class Asteroid implements Tile {
+public class Meteor implements Tile {
 
 	protected final int SPEED = 1;
 	protected int x = 0, y = 0;
-	protected BufferedImage asteroid;
+	protected BufferedImage meteor;
 	Player player = Game.getPlayer();
 
 	private boolean active = true;
+	
+	private int score = 10;
 
-	public Asteroid(SpriteManager manager, Point p) {
+	public Meteor(SpriteManager manager, Point p) {
 		x = p.x;
 		y = p.y;
-		this.asteroid = manager.asteroid;
+		this.meteor = manager.meteor;
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class Asteroid implements Tile {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(asteroid, x, y, scaledWidth, scaledHeight, null);
+		g.drawImage(meteor, x, y, scaledWidth, scaledHeight, null);
 
 		// Collision detection
 		if (player.getBounds().intersects(this.getBounds())) {
@@ -66,6 +68,10 @@ public class Asteroid implements Tile {
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, scaledWidth, scaledHeight);
+	}
+	
+	public int getScore() {
+		return score;
 	}
 
 }

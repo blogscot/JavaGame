@@ -37,7 +37,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 public class Aliens {
 
 	private Point anchor = new Point(30, 50);
-	private final int numOfInvaders = 11;
+	private final int numOfInvadersPerRow = 11;
 	private final SpriteManager manager;
 
 	Point openingMessagePosition = new Point(260, 260);
@@ -53,15 +53,15 @@ public class Aliens {
 	Mothership mothership;
 	Destroyer destroyer;
 
-	private final int AsteroidFreq = 8000;
-	private final int AsteroidInitialDelay = 8000;
-	private boolean asteroidTimerRunning = false;
+	private final int MeteorFreq = 8000;
+	private final int MeteorInitialDelay = 8000;
+	private boolean meteorTimerRunning = false;
 
 	private ArrayList<Invader> invaders = new ArrayList<>();
 
 	private ArrayList<Missile> playerMissiles = new ArrayList<>();
 	private ArrayList<Missile> enemyMissiles = new ArrayList<>();
-	private ArrayList<Asteroid> asteroids = new ArrayList<>();
+	private ArrayList<Meteor> meteors = new ArrayList<>();
 	
 	Player player = Game.getPlayer();
 
@@ -129,7 +129,7 @@ public class Aliens {
 			}
 		}
 
-		addAsteroid();
+		addMeteor();
 		addDestroyer();
 
 		// check if any invader has hit the left or right wall
@@ -195,7 +195,7 @@ public class Aliens {
 			}
 		}
 
-		asteroids.stream().forEach(Asteroid::tick);
+		meteors.stream().forEach(Meteor::tick);
 	}
 
 	public void render(Graphics g) {
@@ -219,12 +219,13 @@ public class Aliens {
 							}
 						});
 
-					asteroids.stream().forEach(
-							asteroid -> {
-								if (asteroid.isActive()
-										&& asteroid.getBounds().intersects(
+					meteors.stream().forEach(
+							meteor -> {
+								if (meteor.isActive()
+										&& meteor.getBounds().intersects(
 												missile.getBounds())) {
-									asteroid.destroy();
+									Player.addScore(meteor.getScore());
+									meteor.destroy();
 									missile.destroy();
 								}
 							});
@@ -266,7 +267,7 @@ public class Aliens {
 		
 		processElements(g, playerMissiles);		
 		processElements(g, enemyMissiles);		
-		processElements(g, asteroids);
+		processElements(g, meteors);
 
 		if (mothership.isActive()) {
 			mothership.render(g);
@@ -313,7 +314,7 @@ public class Aliens {
 		if (isGameOver() && restart == true) {
 			bossDefeated = false;
 			invaders.clear();
-			asteroids.clear();
+			meteors.clear();
 			Invader.restartGame();
 			Player.restartGame();
 			destroyer.restartGame();
@@ -379,24 +380,24 @@ public class Aliens {
 		}
 	}
 
-	public void addAsteroid() {
+	public void addMeteor() {
 
-		if (!asteroidTimerRunning) {
-			asteroidTimerRunning = true;
+		if (!meteorTimerRunning) {
+			meteorTimerRunning = true;
 
-			Timer t = new Timer(r.nextInt(AsteroidFreq), new ActionListener() {
+			Timer t = new Timer(r.nextInt(MeteorFreq), new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					asteroidTimerRunning = false;
+					meteorTimerRunning = false;
 					int width = (int) (getScreenDimension().getWidth())
 							- scaledWidth;
-					asteroids.add(new Asteroid(manager, new Point((r
+					meteors.add(new Meteor(manager, new Point((r
 							.nextInt(width)), 0)));
 				}
 			});
 
-			t.setInitialDelay(AsteroidInitialDelay);
+			t.setInitialDelay(MeteorInitialDelay);
 			t.setRepeats(false);
 			t.start();
 		}
@@ -426,7 +427,7 @@ public class Aliens {
 		anchor.setLocation(new Point(30, 50 + getSpacingDimension().height
 				* row));
 
-		for (int i = 0; i < numOfInvaders; i++) {
+		for (int i = 0; i < numOfInvadersPerRow; i++) {
 
 			switch (invader) {
 			case Martian:
