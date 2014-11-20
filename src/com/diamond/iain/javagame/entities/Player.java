@@ -23,6 +23,7 @@ import com.diamond.iain.javagame.utils.FileIOManager;
 public class Player implements Tile {
 
 	private static final int SPEED = 6;
+	private static final Point StartPosition = new Point(30, playerYPos);
 	private int x = 0, y = 0;
 	private boolean right = false, left = false;
 	private BufferedImage player;
@@ -44,8 +45,8 @@ public class Player implements Tile {
 	long lastPressed = System.currentTimeMillis();
 
 	public Player(SpriteManager spriteManager) {
-		this.x = 30;
-		this.y = playerYPos;
+		this.x = StartPosition.x;
+		this.y = StartPosition.y;
 		this.player = spriteManager.player;
 		manager = spriteManager;
 		highScore = FileIOManager.readHighScoreFromFile();

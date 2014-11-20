@@ -29,7 +29,7 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * This is the controller class for the Space Invaders game.
  * It constructs the invader army, hold collections for Player
- * Enemy missiles, plus asteroids; moves / renders them while 
+ * Enemy missiles, plus meteors; moves / renders them while 
  * on-screen, and removes them if destroyed or go off-screen. 
  *
  */
@@ -90,7 +90,7 @@ public class Aliens {
 
 		// Check if player has lost all their lives
 		// e.g. shot by invader missiles or hit
-		// by asteroids
+		// by meteors
 		if (!Player.isAlive()) {
 			gameState = GameState.Over;
 			return;
@@ -283,7 +283,7 @@ public class Aliens {
 
 	/**
 	 * Process each item in a Tiled ArrayList. This typically contains:
-	 * invaders, missiles and asteroids. Active Tiles get rendered
+	 * invaders, missiles and meteors. Active Tiles get rendered
 	 * otherwise they are removed.
 	 * 
 	 * @param g the shared Graphics variable 
@@ -317,7 +317,8 @@ public class Aliens {
 			meteors.clear();
 			Invader.restartGame();
 			Player.restartGame();
-			destroyer.restartGame();
+			destroyer.reset();
+			mothership.reset();
 			buildInvaderArmy();
 			/* Key presses are asynchronous (whereas tick() is synchronous) 
 			 * so make sure the invader army is finished construction 
