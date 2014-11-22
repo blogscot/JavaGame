@@ -13,43 +13,42 @@ import com.diamond.iain.javagame.tiles.Cloakable;
 import com.diamond.iain.javagame.tiles.Tile;
 
 public class Mercurian extends Invader implements Tile, Cloakable {
-	
+
 	private boolean timerRunning = false;
 	private final int cloakCycle = 20000;
 	private final int cloakDuration = 3000;
 	private boolean cloakEngaged = false;
 	private Random r = new Random();
-	
+
 	Timer cloak;
-	
+
 	public Mercurian(SpriteManager manager, Point p) {
 		x = p.x;
 		y = p.y;
 		this.alien = manager.mercurian;
-		
+
 		score = 20;
-		
+
 		// This is a fixed timer so set it up once
 		cloak = new Timer(cloakDuration, new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				timerRunning = false;
 				cloakEngaged = false;
 			}
 		});
-		
+
 		cloak.setRepeats(false);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		if (!cloakEngaged)
-		{
+		if (!cloakEngaged) {
 			g.drawImage(alien, x, y, width, height, null);
 		}
 	}
-	
+
 	@Override
 	public void cloak() {
 

@@ -15,8 +15,8 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- * This abstract class is the base class for each Invader type:
- * Martian, Mercurian, Plutonian and Venusian.
+ *         This abstract class is the base class for each Invader type: Martian,
+ *         Mercurian, Plutonian and Venusian.
  *
  */
 
@@ -75,7 +75,7 @@ public abstract class Invader implements Tile {
 	public Point getPosition() {
 		return new Point(x, y);
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}

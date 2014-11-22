@@ -7,7 +7,7 @@ import java.awt.Toolkit;
  * 
  * @author Iain Diamond
  * 
- * This class contains the shared game constants 
+ *         This class contains the shared game constants
  *
  */
 
@@ -24,37 +24,36 @@ public class GameConstants {
 	public static final int TileHeight = 40;
 	public static final int TileWidth = 60;
 
-	public static final int scaledHeight = (int)(TileHeight / getScaling());
-	public static final int scaledWidth = (int)(TileWidth / getScaling());
+	public static final int scaledHeight = (int) (TileHeight / getScaling());
+	public static final int scaledWidth = (int) (TileWidth / getScaling());
 
 	public static final int TopWall = scaledHeight;
 	public static final int LeftWall = 0;
 	public static final int RightWall = getScreenDimension().width;
-	
+
 	public static final int playerYPos = getScreenDimension().height - 80;
 	public static final int missileYPos = playerYPos - scaledHeight;
-	
 
 	// These are convenience methods so that the game can be run on two
 	// different screen sizes (PC and Mac)
-	
-	public static Dimension getScreenDimension(){
-		if (OSValidator.isMac()){
+
+	public static Dimension getScreenDimension() {
+		if (OSValidator.isMac()) {
 			return Toolkit.getDefaultToolkit().getScreenSize();
 		}
 		return new Dimension(PCScreenWidth, PCScreenHeight);
 	}
 
 	// XSpacing = width, YSpacing = height
-	public static Dimension getSpacingDimension(){
-		if (OSValidator.isMac()){
+	public static Dimension getSpacingDimension() {
+		if (OSValidator.isMac()) {
 			return new Dimension(MacXSpacing, MacYSpacing);
 		}
 		return new Dimension(PCXSpacing, PCYSpacing);
 	}
-	
-	private static double getScaling(){
-		if (OSValidator.isMac()){
+
+	private static double getScaling() {
+		if (OSValidator.isMac()) {
 			return 1.7;
 		}
 		return 2;

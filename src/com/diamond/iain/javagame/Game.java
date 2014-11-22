@@ -33,45 +33,46 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	public static boolean running = false;
 	public Thread gameThread;
-	
+
 	private BufferedImage spriteSheet;
-	
+
 	private static Player player;
 	private static Aliens aliens;
-	
+
 	// Convenience variables to save typing
 	private static int screenWidth = GameConstants.getScreenDimension().width;
 	private static int screenHeight = GameConstants.getScreenDimension().height;
-	
+
 	public void init() {
 		ImageLoader loader = new ImageLoader();
-		
-		try
-		{
+
+		try {
 			spriteSheet = loader.load("/spritesheet.png");
 		} catch (IllegalArgumentException e) {
 			System.out.println("SpriteSheet not found.");
 			System.exit(-1);
 		}
-		
+
 		SpriteSheet ss = new SpriteSheet(spriteSheet);
 		SpriteManager manager = new SpriteManager(ss);
-		
+
 		player = new Player(manager);
 		aliens = new Aliens(manager);
-		
+
 		this.addKeyListener(new KeyManager());
 	}
-	
+
 	public synchronized void start() {
-		if (running) return;
+		if (running)
+			return;
 		running = true;
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-	
+
 	public synchronized void stop() {
-		if (!running) return;
+		if (!running)
+			return;
 		running = false;
 		try {
 			gameThread.join();
@@ -79,24 +80,24 @@ public class Game extends Canvas implements Runnable {
 			System.out.println("Bad Shutdown error.");
 		}
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		init();
 		// 18ms produces ~60 fps
 		long sleepy = 18;
-		
-		while(running){
-			
+
+		while (running) {
+
 			try {
 				Thread.sleep(sleepy);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-			tick();     // everybody move!
-			render();   // everybody draw!
+			tick(); // everybody move!
+			render(); // everybody draw!
 		}
 		stop();
 	}
@@ -105,29 +106,29 @@ public class Game extends Canvas implements Runnable {
 		player.tick();
 		aliens.tick();
 	}
-	
+
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
 			return;
 		}
-		
+
 		Graphics g = bs.getDrawGraphics();
-		
+
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, screenWidth, screenHeight);
-		
+
 		// Let's draw the moving pieces
 		player.render(g);
 		aliens.render(g);
-		
-		g.dispose();   // tidy up when your finished
+
+		g.dispose(); // tidy up when your finished
 		bs.show();
 	}
 
 	public static void main(String[] args) {
-		
+
 		Game game = new Game();
 		game.setPreferredSize(new Dimension(screenWidth, screenHeight));
 
@@ -137,22 +138,20 @@ public class Game extends Canvas implements Runnable {
 		frame.setResizable(false);
 		frame.add(game);
 		frame.setVisible(true);
-		
+
 		game.start();
 	}
 
 	public static boolean isGameOver() {
 		return Aliens.isGameOver();
 	}
-	
-	// KeyManager updates Player and Aliens with key presses 
-	public static Player getPlayer(){
+
+	// KeyManager updates Player and Aliens with key presses
+	public static Player getPlayer() {
 		return player;
 	}
-	
-	public static Aliens getAliens(){
+
+	public static Aliens getAliens() {
 		return aliens;
 	}
 }
-
-

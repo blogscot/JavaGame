@@ -7,7 +7,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public class PlayerMissile extends Missile implements Tile {
 
-	public PlayerMissile(SpriteManager manager, Point p){
+	public PlayerMissile(SpriteManager manager, Point p) {
 		x = p.x;
 		y = p.y;
 		this.missile = manager.playerMissile;

@@ -13,9 +13,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.Timer;
 
@@ -27,10 +26,10 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- * This is the controller class for the Space Invaders game.
- * It constructs the invader army, hold collections for Player
- * Enemy missiles, plus meteors; moves / renders them while 
- * on-screen, and removes them if destroyed or go off-screen. 
+ *         This is the controller class for the Space Invaders game. It
+ *         constructs the invader army, hold collections for Player Enemy
+ *         missiles, plus meteors; moves / renders them while on-screen, and
+ *         removes them if destroyed or go off-screen.
  *
  */
 
@@ -57,12 +56,11 @@ public class Aliens {
 	private final int MeteorInitialDelay = 8000;
 	private boolean meteorTimerRunning = false;
 
-	private ArrayList<Invader> invaders = new ArrayList<>();
+	private CopyOnWriteArrayList<Invader> invaders = new CopyOnWriteArrayList<>();
+	private CopyOnWriteArrayList<Missile> playerMissiles = new CopyOnWriteArrayList<>();
+	private CopyOnWriteArrayList<Missile> enemyMissiles = new CopyOnWriteArrayList<>();
+	private CopyOnWriteArrayList<Meteor> meteors = new CopyOnWriteArrayList<>();
 
-	private ArrayList<Missile> playerMissiles = new ArrayList<>();
-	private ArrayList<Missile> enemyMissiles = new ArrayList<>();
-	private ArrayList<Meteor> meteors = new ArrayList<>();
-	
 	Player player = Game.getPlayer();
 
 	enum GameState {
@@ -141,7 +139,7 @@ public class Aliens {
 				break;
 			}
 		}
-		
+
 		// Everybody moves. Special invaders use special abilities
 		invaders.stream().forEach(invader -> {
 			if (invader instanceof Martian) {
@@ -151,7 +149,7 @@ public class Aliens {
 			}
 			invader.tick();
 		});
-		
+
 		// Move each player missile if it is still on screen
 		for (Missile m : playerMissiles) {
 			if (m.getPosition().getY() > TopWall) {
@@ -161,7 +159,7 @@ public class Aliens {
 				m.destroy();
 			}
 		}
-		
+
 		// Move each enemy missile if it is still on screen
 		for (Missile m : enemyMissiles) {
 			if (m.getPosition().getY() < getScreenDimension().height) {
@@ -255,18 +253,17 @@ public class Aliens {
 						}
 					}
 				});
-		
 
 		// Enemy Missile Collision detection
 		enemyMissiles.stream().forEach(missile -> {
-				if (player.getBounds().intersects(missile.getBounds())) {
-					Player.losesOneLife();
-					missile.destroy();
-				}
+			if (player.getBounds().intersects(missile.getBounds())) {
+				Player.losesOneLife();
+				missile.destroy();
+			}
 		});
-		
-		processElements(g, playerMissiles);		
-		processElements(g, enemyMissiles);		
+
+		processElements(g, playerMissiles);
+		processElements(g, enemyMissiles);
 		processElements(g, meteors);
 
 		if (mothership.isActive()) {
@@ -276,34 +273,35 @@ public class Aliens {
 		if (destroyer.isActive()) {
 			destroyer.render(g);
 		}
-		
+
 		processElements(g, invaders);
 
 	}
 
 	/**
 	 * Process each item in a Tiled ArrayList. This typically contains:
-	 * invaders, missiles and meteors. Active Tiles get rendered
-	 * otherwise they are removed.
+	 * invaders, missiles and meteors. Active Tiles get rendered otherwise they
+	 * are removed.
 	 * 
-	 * @param g the shared Graphics variable 
-	 * @param source An arrayList of Tile items
+	 * @param g
+	 *            the shared Graphics variable
+	 * @param list
+	 *            An arrayList of Tile items
 	 */
-	private <X> void processElements(Graphics g, ArrayList<X> source){
-		ListIterator<X> it = source.listIterator();
-		
-		while (it.hasNext()){
-			Tile t = (Tile)it.next();
+	private <T> void processElements(Graphics g,
+			CopyOnWriteArrayList<? extends Tile> list) {
+
+		list.stream().forEach(t -> {
 			if (t.isActive()) {
 				// render each Tile if it is still on the screen
 				t.render(g);
 			} else {
 				// remove 'destroyed Tiles
-				it.remove();
+				list.remove(t);
 			}
-		}
+		});
 	}
-	
+
 	/**
 	 * The user can restart the game using a key press
 	 * 
@@ -313,18 +311,21 @@ public class Aliens {
 	public void restartGame(boolean restart) {
 		if (isGameOver() && restart == true) {
 			bossDefeated = false;
-			invaders.clear();
+			tearDownInvaders();
+			playerMissiles.clear();
+			enemyMissiles.clear();
 			meteors.clear();
 			Invader.restartGame();
 			Player.restartGame();
 			destroyer.reset();
 			mothership.reset();
 			buildInvaderArmy();
-			/* Key presses are asynchronous (whereas tick() is synchronous) 
-			 * so make sure the invader army is finished construction 
-			 * before starting the game for real, comparing list + modifying
-			 *  list simultaneously = BAD!
-			 */  
+			/*
+			 * Key presses are asynchronous (whereas tick() is synchronous) so
+			 * make sure the invader army is finished construction before
+			 * starting the game for real, comparing list + modifying list
+			 * simultaneously = BAD!
+			 */
 			gameState = GameState.Active;
 		}
 	}
@@ -332,7 +333,7 @@ public class Aliens {
 	public void addEnemyMissile(Point p) {
 		enemyMissiles.add(new InvaderMissile(manager, new Point(p.x, p.y)));
 	}
-	
+
 	public void addPlayerMissile(Point p) {
 		playerMissiles.add(new PlayerMissile(manager, new Point(p.x, p.y)));
 	}
@@ -358,6 +359,16 @@ public class Aliens {
 		g.setColor(Color.white);
 		g.drawString("Press 's' to start a new game.", startGamePosition.x,
 				startGamePosition.y);
+	}
+
+	/**
+	 * This method carefully runs through the list of active invaders, marks
+	 * them as inactive, stops any timers and finally clears the collection
+	 * 
+	 */
+	private void tearDownInvaders() {
+		invaders.stream().forEach(Invader::destroy);
+		invaders.clear();
 	}
 
 	public void addDestroyer() {
@@ -393,8 +404,8 @@ public class Aliens {
 					meteorTimerRunning = false;
 					int width = (int) (getScreenDimension().getWidth())
 							- scaledWidth;
-					meteors.add(new Meteor(manager, new Point((r
-							.nextInt(width)), 0)));
+					meteors.add(new Meteor(manager, new Point(
+							(r.nextInt(width)), 0)));
 				}
 			});
 

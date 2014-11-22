@@ -9,14 +9,14 @@ import javax.imageio.ImageIO;
  * 
  * @author Iain Diamond
  * 
- * Loads and returns the Sprite Sheet
+ *         Loads and returns the Sprite Sheet
  *
  */
 
 public class ImageLoader {
-	
-	public BufferedImage load(String path){
-		
+
+	public BufferedImage load(String path) {
+
 		try {
 			return ImageIO.read(getClass().getResource(path));
 		} catch (IOException e) {

@@ -21,7 +21,7 @@ public class Meteor implements Tile {
 	Player player = Game.getPlayer();
 
 	private boolean active = true;
-	
+
 	private int score = 10;
 
 	public Meteor(SpriteManager manager, Point p) {
@@ -69,7 +69,7 @@ public class Meteor implements Tile {
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, scaledWidth, scaledHeight);
 	}
-	
+
 	public int getScore() {
 		return score;
 	}

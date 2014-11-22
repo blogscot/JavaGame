@@ -23,8 +23,8 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- * This abstract class is the base class for each Ship type:
- * Destroyer and Mothership.
+ *         This abstract class is the base class for each Ship type: Destroyer
+ *         and Mothership.
  *
  */
 
@@ -35,8 +35,8 @@ public abstract class Ship implements Tile, CanFire {
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
 	protected boolean active = true;
-	protected static final int width = (int)(scaledWidth * 2);
-	protected static final int height = (int)(scaledHeight);
+	protected static final int width = (int) (scaledWidth * 2);
+	protected static final int height = (int) (scaledHeight);
 
 	protected Point p;
 
@@ -107,17 +107,17 @@ public abstract class Ship implements Tile, CanFire {
 	 * 
 	 */
 	public void reset() {
-		if (t != null && t.isRunning()){
+		if (t != null && t.isRunning()) {
 			t.stop();
 		}
 		lives = startLives;
 		active = false;
-		
+
 		// Always start moving left to right
 		direction = 1;
 		speed = SPEED;
-		
-		// Move to start position 
+
+		// Move to start position
 		x = p.x;
 		y = p.y;
 	}
@@ -133,8 +133,10 @@ public abstract class Ship implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					fireTimerRunning = false;
-					//debug: if (!isActive()) System.out.println("Ship firing @"+x+","+y);
-					Game.getAliens().addEnemyMissile(new Point(x + width / 2, y + height));
+					// debug: if (!isActive())
+					// System.out.println("Ship firing @"+x+","+y);
+					Game.getAliens().addEnemyMissile(
+							new Point(x + width / 2, y + height));
 				}
 			});
 

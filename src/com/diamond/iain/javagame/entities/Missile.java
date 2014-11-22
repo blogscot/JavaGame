@@ -14,27 +14,28 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- * This abstract class is the base class for each Missile type:
- * PlayerMissile and InvaderMissile.
+ *         This abstract class is the base class for each Missile type:
+ *         PlayerMissile and InvaderMissile.
  *
  */
 
 public abstract class Missile implements Tile {
-	
+
 	protected final int SPEED = 5;
 	private final int xOffset = 15;
 	private final int yOffset = 10;
 	private final int missileWidth = 6;
 	private final int missileHeight = 22;
-	
+
 	protected int x = 0, y = 0;
 	protected BufferedImage missile;
 
 	private boolean active = true;
-	
+
 	@Override
 	public void tick() {
-		if (y > 0) y -= SPEED;
+		if (y > 0)
+			y -= SPEED;
 	}
 
 	@Override
@@ -44,20 +45,21 @@ public abstract class Missile implements Tile {
 
 	@Override
 	public Point getPosition() {
-		return new Point(x,y);
-	}
-	
-	@Override
-	public Rectangle getBounds(){
-		// A missile is quite a bit smaller than a Tile
-		return new Rectangle(x+xOffset,y+yOffset, missileWidth, missileHeight);
+		return new Point(x, y);
 	}
 
 	@Override
-	public boolean isActive(){
+	public Rectangle getBounds() {
+		// A missile is quite a bit smaller than a Tile
+		return new Rectangle(x + xOffset, y + yOffset, missileWidth,
+				missileHeight);
+	}
+
+	@Override
+	public boolean isActive() {
 		return active;
 	}
-	
+
 	@Override
 	public void destroy() {
 		active = false;

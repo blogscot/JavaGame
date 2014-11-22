@@ -21,7 +21,7 @@ public class Martian extends Invader implements Tile, CanFire {
 	Player player = Game.getPlayer();
 	Random r = new Random();
 	Timer t;
-	
+
 	public Martian(SpriteManager spriteManager, Point p) {
 		x = p.x;
 		y = p.y;
@@ -35,7 +35,7 @@ public class Martian extends Invader implements Tile, CanFire {
 	public void tick() {
 		x += speed;
 	}
-	
+
 	@Override
 	public void destroy() {
 		t.stop();
@@ -62,7 +62,8 @@ public class Martian extends Invader implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					timerRunning = false;
-					//debug: if (!isActive()) System.out.println("Martian firing @"+x+","+y);
+					// debug: if (!isActive())
+					// System.out.println("Martian firing @"+x+","+y);
 					Game.getAliens().addEnemyMissile(new Point(x, y + height));
 				}
 			});
