@@ -56,6 +56,7 @@ public class Aliens {
 	private final int MeteorInitialDelay = 8000;
 	private boolean meteorTimerRunning = false;
 
+	// http://www.javacodegeeks.com/2011/05/avoid-concurrentmodificationexception.html
 	private CopyOnWriteArrayList<Invader> invaders = new CopyOnWriteArrayList<>();
 	private CopyOnWriteArrayList<Missile> playerMissiles = new CopyOnWriteArrayList<>();
 	private CopyOnWriteArrayList<Missile> enemyMissiles = new CopyOnWriteArrayList<>();
@@ -107,6 +108,7 @@ public class Aliens {
 			}
 		});
 
+		// Mothership reaches player?
 		if (mothership.isActive() && mothership.reachedPlayer()) {
 			mothership.destroy();
 			Player.losesOneLife();
@@ -116,6 +118,7 @@ public class Aliens {
 			}
 		}
 
+		// Is it Boss time?
 		if (isArmyDefeated() && !destroyer.isActive()) {
 			if (!bossDefeated) {
 				mothership.setActive(true);
@@ -127,6 +130,8 @@ public class Aliens {
 			}
 		}
 
+		// These methods run on timers. A new item is added only when
+		// its timer has expired
 		addMeteor();
 		addDestroyer();
 
@@ -193,6 +198,7 @@ public class Aliens {
 			}
 		}
 
+		// Meteors move
 		meteors.stream().forEach(Meteor::tick);
 	}
 
@@ -203,6 +209,23 @@ public class Aliens {
 			return;
 		}
 
+		performCollisionDetection();
+
+		processElements(g, playerMissiles);
+		processElements(g, enemyMissiles);
+		processElements(g, meteors);
+		processElements(g, invaders);
+
+		if (mothership.isActive()) {
+			mothership.render(g);
+		}
+
+		if (destroyer.isActive()) {
+			destroyer.render(g);
+		}
+	}
+
+	private void performCollisionDetection() {
 		// Player missiles collision detection
 		playerMissiles.stream().forEach(
 				missile -> {
@@ -261,27 +284,14 @@ public class Aliens {
 				missile.destroy();
 			}
 		});
-
-		processElements(g, playerMissiles);
-		processElements(g, enemyMissiles);
-		processElements(g, meteors);
-
-		if (mothership.isActive()) {
-			mothership.render(g);
-		}
-
-		if (destroyer.isActive()) {
-			destroyer.render(g);
-		}
-
-		processElements(g, invaders);
-
 	}
 
 	/**
 	 * Process each item in a Tiled ArrayList. This typically contains:
 	 * invaders, missiles and meteors. Active Tiles get rendered otherwise they
 	 * are removed.
+	 * 
+	 * Note: We're using Generics with Type covariance
 	 * 
 	 * @param g
 	 *            the shared Graphics variable

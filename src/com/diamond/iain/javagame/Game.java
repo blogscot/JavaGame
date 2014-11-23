@@ -33,6 +33,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	public static boolean running = false;
 	public Thread gameThread;
+	private static JFrame frame;
 
 	private BufferedImage spriteSheet;
 
@@ -132,7 +133,7 @@ public class Game extends Canvas implements Runnable {
 		Game game = new Game();
 		game.setPreferredSize(new Dimension(screenWidth, screenHeight));
 
-		JFrame frame = new JFrame("Space Invaders");
+		frame = new JFrame("Space Invaders");
 		frame.setSize(screenWidth, screenHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -140,6 +141,10 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 
 		game.start();
+	}
+	
+	public static void endGame(boolean b) {
+		System.exit(0);
 	}
 
 	public static boolean isGameOver() {

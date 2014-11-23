@@ -39,6 +39,10 @@ public class KeyManager implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_S) {
 			aliens.restartGame(true);
 		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			Game.endGame(true);
+		}
 	}
 
 	@Override
