@@ -142,10 +142,6 @@ public class Game extends Canvas implements Runnable {
 
 		game.start();
 	}
-	
-	public static void endGame(boolean b) {
-		System.exit(0);
-	}
 
 	public static boolean isGameOver() {
 		return Aliens.isGameOver();
