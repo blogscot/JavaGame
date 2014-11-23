@@ -101,17 +101,6 @@ public class Player implements Tile {
 		level += 1;
 	}
 
-	private void updateScore(Graphics g) {
-		g.setFont(f);
-		g.setColor(Color.white);
-		g.drawString("Player Score: " + totalScore, scorePosition.x,
-				scorePosition.y);
-		g.drawString("Lives " + lives, livesPosition.x, livesPosition.y);
-		g.drawString("Level " + level, levelPosition.x, levelPosition.y);
-		g.drawString("High Score: " + highScore, highScorePosition.x,
-				highScorePosition.y);
-	}
-
 	public void setRight(boolean right) {
 		this.right = right;
 	}
@@ -148,6 +137,10 @@ public class Player implements Tile {
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, scaledWidth, scaledHeight);
 	}
+	
+	public static int getLevel() {
+		return level;
+	}
 
 	// stub
 	@Override
@@ -173,5 +166,16 @@ public class Player implements Tile {
 	@Override
 	public void destroy() {
 		lives -= 1;
+	}
+
+	private void updateScore(Graphics g) {
+		g.setFont(f);
+		g.setColor(Color.white);
+		g.drawString("Player Score: " + totalScore, scorePosition.x,
+				scorePosition.y);
+		g.drawString("Lives " + lives, livesPosition.x, livesPosition.y);
+		g.drawString("Level " + level, levelPosition.x, levelPosition.y);
+		g.drawString("High Score: " + highScore, highScorePosition.x,
+				highScorePosition.y);
 	}
 }

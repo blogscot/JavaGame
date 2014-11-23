@@ -123,8 +123,10 @@ public class Aliens {
 			if (!bossDefeated) {
 				mothership.setActive(true);
 			} else {
+				// Boss is Dead! Let's Level Up!
 				bossDefeated = false;
 				Invader.levelUp();
+				mothership.levelUp();
 				Player.levelUp();
 				buildInvaderArmy();
 			}

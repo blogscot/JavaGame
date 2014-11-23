@@ -62,8 +62,6 @@ public class Martian extends Invader implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					timerRunning = false;
-					// debug: if (!isActive())
-					// System.out.println("Martian firing @"+x+","+y);
 					Game.getAliens().addEnemyMissile(new Point(x, y + height));
 				}
 			});

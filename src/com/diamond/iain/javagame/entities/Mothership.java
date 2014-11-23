@@ -18,23 +18,26 @@ public class Mothership extends Ship implements Tile, CanFire {
 	Player player = Game.getPlayer();
 	private static final Point StartPosition = new Point(30, 50);
 
+	// Motherships get faster each level
+	private final int initialSpeed = 3;
+	private int speed1 = 4;
+	private int speed2 = speed1 + 1;
+	private int speed3 = speed2 + 1;
+	private int speed4 = speed3 + 1;
+
+	// As the game can be played on different screen sizes it's necessary
+	// to calculate speed up positions at compile time.
 	private int distanceToPlayer = playerYPos - StartPosition.y;
 	private int numberofSpeedUps = 4;
 	private int speedUpDistance = distanceToPlayer / numberofSpeedUps;
+	private final int speedUpPos1 = StartPosition.y + speedUpDistance;
+	private final int speedUpPos2 = StartPosition.y + speedUpDistance * 2;
+	private final int speedUpPos3 = StartPosition.y + speedUpDistance * 3;
 
-	private final int SPEED1 = 4;
-	private final int SPEED2 = 5;
-	private final int SPEED3 = 6;
-	private final int SPEED4 = 7;
-	private final int SPEEDUP1 = StartPosition.y + speedUpDistance;
-	private final int SPEEDUP2 = StartPosition.y + speedUpDistance * 2;
-	private final int SPEEDUP3 = StartPosition.y + speedUpDistance * 3;
-
+	// Let's make motherships appear bigger
 	private static final double BossScalingFactor = 1.4;
 	protected static final int BossWidth = (int) (scaledWidth * 2 * BossScalingFactor);
 	protected static final int BossHeight = (int) (scaledHeight * BossScalingFactor);
-
-	boolean flag1 = false, flag2 = false;
 
 	public Mothership(SpriteManager manager) {
 		p = new Point(StartPosition.x, StartPosition.y);
@@ -43,7 +46,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 		this.manager = manager;
 		this.ship = manager.mothership;
 		direction = 1;
-		speed = SPEED1;
+		speed = speed1;
 		startLives = 3;
 		lives = startLives;
 		active = false;
@@ -54,16 +57,16 @@ public class Mothership extends Ship implements Tile, CanFire {
 	@Override
 	public void tick() {
 
-		if (speed == SPEED1 && y > SPEEDUP1) {
-			speed = SPEED2;
+		if (speed == speed1 && y > speedUpPos1) {
+			speed = speed2;
 		}
 
-		if (speed == SPEED2 && y > SPEEDUP2) {
-			speed = SPEED3;
+		if (speed == speed2 && y > speedUpPos2) {
+			speed = speed3;
 		}
 
-		if (speed == SPEED3 && y > SPEEDUP3) {
-			speed = SPEED4;
+		if (speed == speed3 && y > speedUpPos3) {
+			speed = speed4;
 		}
 
 		x += speed * direction;
@@ -115,10 +118,22 @@ public class Mothership extends Ship implements Tile, CanFire {
 
 		// Always start moving left to right
 		direction = 1;
-		speed = SPEED1;
+		recalculateSpeeds();
+		speed = speed1;
 
 		// Move to start position
 		x = p.x;
 		y = p.y;
+	}
+
+	public void levelUp() {
+		recalculateSpeeds();
+	}
+
+	private void recalculateSpeeds() {
+		speed1 = initialSpeed + Player.getLevel();
+		speed2 = speed1 + 1;
+		speed3 = speed2 + 1;
+		speed4 = speed3 + 1;
 	}
 }
