@@ -53,6 +53,15 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 			g.drawImage(ship, x, y, width, height, null);
 		}
 	}
+	
+	/**
+	 * Resets the ship's position, direction and firing timers.
+	 * 
+	 */
+	public void reset() {
+		super.reset();
+		speed = SPEED;
+	}
 
 	@Override
 	public void cloak() {

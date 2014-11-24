@@ -30,7 +30,7 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public abstract class Ship implements Tile, CanFire {
 
-	protected static final int SPEED = 2;
+	protected static final int SPEED = 1;
 	protected int direction = 1;
 	protected int speed = SPEED;
 	protected int x = 0, y = 0;
@@ -115,7 +115,6 @@ public abstract class Ship implements Tile, CanFire {
 
 		// Always start moving left to right
 		direction = 1;
-		speed = SPEED;
 
 		// Move to start position
 		x = p.x;

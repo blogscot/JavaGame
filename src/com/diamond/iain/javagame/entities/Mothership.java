@@ -18,7 +18,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 	Player player = Game.getPlayer();
 	private static final Point StartPosition = new Point(30, 50);
 
-	// Motherships get faster each level
+	// The mothership get faster each level
 	private final int initialSpeed = 3;
 	private int speed1 = 4;
 	private int speed2 = speed1 + 1;
@@ -34,7 +34,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 	private final int speedUpPos2 = StartPosition.y + speedUpDistance * 2;
 	private final int speedUpPos3 = StartPosition.y + speedUpDistance * 3;
 
-	// Let's make motherships appear bigger
+	// Let's make the mothership appear bigger
 	private static final double BossScalingFactor = 1.4;
 	protected static final int BossWidth = (int) (scaledWidth * 2 * BossScalingFactor);
 	protected static final int BossHeight = (int) (scaledHeight * BossScalingFactor);
@@ -110,20 +110,9 @@ public class Mothership extends Ship implements Tile, CanFire {
 	 * 
 	 */
 	public void reset() {
-		if (t != null && t.isRunning()) {
-			t.stop();
-		}
-		lives = startLives;
-		active = false;
-
-		// Always start moving left to right
-		direction = 1;
+		super.reset();
 		recalculateSpeeds();
 		speed = speed1;
-
-		// Move to start position
-		x = p.x;
-		y = p.y;
 	}
 
 	public void levelUp() {
