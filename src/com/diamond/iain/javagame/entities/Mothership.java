@@ -26,7 +26,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 	private int speed4 = speed3 + 1;
 
 	// As the game can be played on different screen sizes it's necessary
-	// to calculate speed up positions at compile time.
+	// to calculate speed up positions at runtime.
 	private int distanceToPlayer = playerYPos - StartPosition.y;
 	private int numberofSpeedUps = 4;
 	private int speedUpDistance = distanceToPlayer / numberofSpeedUps;
@@ -116,6 +116,7 @@ public class Mothership extends Ship implements Tile, CanFire {
 	}
 
 	public void levelUp() {
+		lives = startLives;
 		recalculateSpeeds();
 	}
 

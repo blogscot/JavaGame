@@ -74,8 +74,7 @@ public abstract class Ship implements Tile, CanFire {
 	public void destroy() {
 		lives -= 1;
 		if (lives <= 0) {
-			active = false;
-			lives = startLives;
+			setActive(false);
 		}
 	}
 
@@ -83,6 +82,11 @@ public abstract class Ship implements Tile, CanFire {
 		return active;
 	}
 
+	/**
+	 * 
+	 * @param flag true to start ship
+	 *             false when ship destroyed
+	 */
 	public void setActive(boolean flag) {
 		active = flag;
 		if (!active) {
@@ -107,8 +111,8 @@ public abstract class Ship implements Tile, CanFire {
 	 * 
 	 */
 	public void reset() {
-		if (t != null && t.isRunning()) {
-			t.stop();
+		if (t != null && !t.isRunning()) {
+			t.start();
 		}
 		lives = startLives;
 		active = false;

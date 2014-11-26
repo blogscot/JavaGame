@@ -110,16 +110,25 @@ public class Aliens {
 
 		// Mothership reaches player?
 		if (mothership.isActive() && mothership.reachedPlayer()) {
-			mothership.destroy();
-			Player.losesOneLife();
-			if (!Player.isAlive()) {
-				gameState = GameState.Over;
-				return;
+			while (!bossDefeated) {
+				mothership.destroy();
+				Player.losesOneLife();
+
+				// has mothership been completely destroyed?
+				if (!mothership.isActive()) {
+					mothership.reset();
+					bossDefeated = true;
+				}
+
+				if (!Player.isAlive()) {
+					gameState = GameState.Over;
+					return;
+				}
 			}
 		}
 
 		// Is it Boss time?
-		if (isArmyDefeated() && !destroyer.isActive()) {
+		if (isArmyDefeated()) {
 			if (!bossDefeated) {
 				mothership.setActive(true);
 			} else {
