@@ -35,15 +35,18 @@ import com.diamond.iain.javagame.tiles.Tile;
 
 public class Aliens {
 
+	// invader data
 	private Point anchor = new Point(30, 50);
 	private final int numOfInvadersPerRow = 11;
 	private final SpriteManager manager;
 
+	// display data
 	Point openingMessagePosition = new Point(260, 260);
 	Point startGamePosition = new Point(400, 400);
 	Font basic = new Font("Dialog", Font.PLAIN, 32);
 	Font grande = new Font("Dialog", Font.PLAIN, 100);
 
+	// Ship data
 	private final int ShipFreq = 20000;
 	private final int ShipInitialDelay = 30000;
 	private boolean destroyerTimerRunning = false;
@@ -52,6 +55,7 @@ public class Aliens {
 	Mothership mothership;
 	Destroyer destroyer;
 
+	// Meteor data
 	private final int MeteorFreq = 8000;
 	private final int MeteorInitialDelay = 8000;
 	private boolean meteorTimerRunning = false;
@@ -131,7 +135,7 @@ public class Aliens {
 		if (isArmyDefeated()) {
 			if (!bossDefeated) {
 				if (!mothership.isActive())
-				mothership.setActive(true);
+					mothership.setActive(true);
 			} else {
 				// Boss is Dead! Let's Level Up!
 				bossDefeated = false;
@@ -238,11 +242,73 @@ public class Aliens {
 	}
 
 	/**
-	 * Player and (all) enemies collection detection
+	 * 
+	 * Restarts a new game
+	 * 
+	 * The user can restart the game using a key press. All enemies and players
+	 * are reset. Finally the new army is built and the game state changed.
+	 * 
+	 * @param restart
+	 *            true to restart
+	 */
+	public void restartGame(boolean restart) {
+		if (isGameOver() && restart == true) {
+			bossDefeated = false;
+			tearDownInvaders();
+			playerMissiles.clear();
+			enemyMissiles.clear();
+			meteors.clear();
+			Invader.restartGame();
+			Player.restartGame();
+			destroyer.reset();
+			mothership.reset();
+			buildInvaderArmy();
+			/*
+			 * Key presses are asynchronous (whereas tick() is synchronous) so
+			 * make sure the invader army is finished construction before
+			 * starting the game for real, comparing list + modifying list
+			 * simultaneously = BAD!
+			 */
+			gameState = GameState.Active;
+		}
+	}
+
+	/**
+	 * One of the Enemy classes adds a missile to the collection
+	 * 
+	 * @param p
+	 *            = firing position
+	 * 
+	 */
+	public void addEnemyMissile(Point p) {
+		enemyMissiles.add(new InvaderMissile(manager, new Point(p.x, p.y)));
+	}
+
+	/**
+	 * Player class adds a missile to the collection
+	 * 
+	 * @param p
+	 *            = firing position
+	 */
+	public void addPlayerMissile(Point p) {
+		playerMissiles.add(new PlayerMissile(manager, new Point(p.x, p.y)));
+	}
+
+	/**
+	 * A convenience function for improved readability
+	 * 
+	 * @return true = Game Over
+	 */
+	public static boolean isGameOver() {
+		return gameState == GameState.Over;
+	}
+
+	/**
+	 * Collection detection for player and (all) enemies missiles
 	 * 
 	 */
 	private void performCollisionDetection() {
-		
+
 		// Player missiles collision detection
 		playerMissiles.stream().forEach(
 				missile -> {
@@ -305,10 +371,10 @@ public class Aliens {
 
 	/**
 	 * Process each item in a Tiled ArrayList. This typically contains:
-	 * invaders, missiles and meteors. Active Tiles get rendered otherwise they
+	 * invaders, missiles or meteors. Active Tiles get rendered otherwise they
 	 * are removed.
 	 * 
-	 * Note: We're using Generics with Type covariance
+	 * Note: Uses generics with type covariance
 	 * 
 	 * @param g
 	 *            the shared Graphics variable
@@ -330,53 +396,19 @@ public class Aliens {
 	}
 
 	/**
-	 * The user can restart the game using a key press
-	 * 
-	 * @param restart
-	 *            true to restart
-	 */
-	public void restartGame(boolean restart) {
-		if (isGameOver() && restart == true) {
-			bossDefeated = false;
-			tearDownInvaders();
-			playerMissiles.clear();
-			enemyMissiles.clear();
-			meteors.clear();
-			Invader.restartGame();
-			Player.restartGame();
-			destroyer.reset();
-			mothership.reset();
-			buildInvaderArmy();
-			/*
-			 * Key presses are asynchronous (whereas tick() is synchronous) so
-			 * make sure the invader army is finished construction before
-			 * starting the game for real, comparing list + modifying list
-			 * simultaneously = BAD!
-			 */
-			gameState = GameState.Active;
-		}
-	}
-
-	public void addEnemyMissile(Point p) {
-		enemyMissiles.add(new InvaderMissile(manager, new Point(p.x, p.y)));
-	}
-
-	public void addPlayerMissile(Point p) {
-		playerMissiles.add(new PlayerMissile(manager, new Point(p.x, p.y)));
-	}
-
-	/**
 	 * 
 	 * @return false when all invaders are destroyed
 	 */
-	public boolean isArmyDefeated() {
+	private boolean isArmyDefeated() {
 		return invaders.size() == 0;
 	}
 
-	public static boolean isGameOver() {
-		return gameState == GameState.Over;
-	}
-
+	/**
+	 * Displays Space Invaders Welcome Screen
+	 * 
+	 * @param g
+	 * 
+	 */
 	private void displayStartGame(Graphics g) {
 		g.setFont(grande);
 		g.setColor(Color.cyan);
@@ -389,8 +421,8 @@ public class Aliens {
 	}
 
 	/**
-	 * This method carefully runs through the list of active invaders, marks
-	 * them as inactive, stops any timers and finally clears the collection
+	 * This method runs through the list of active invaders, marks them as
+	 * inactive, stops any timers and finally clears the collection
 	 * 
 	 */
 	private void tearDownInvaders() {
@@ -398,7 +430,13 @@ public class Aliens {
 		invaders.clear();
 	}
 
-	public void addDestroyer() {
+	/**
+	 * Add a new destroyer
+	 * 
+	 * Uses a one-shot timer to trigger randomly appearing destroyer
+	 * 
+	 */
+	private void addDestroyer() {
 
 		if (!destroyerTimerRunning) {
 			destroyerTimerRunning = true;
@@ -419,7 +457,13 @@ public class Aliens {
 		}
 	}
 
-	public void addMeteor() {
+	/**
+	 * Add a new meteor
+	 * 
+	 * Uses a one-shot timer to trigger randomly appearing meteors
+	 * 
+	 */
+	private void addMeteor() {
 
 		if (!meteorTimerRunning) {
 			meteorTimerRunning = true;
@@ -443,7 +487,8 @@ public class Aliens {
 	}
 
 	/**
-	 * Build a new army
+	 * Builds a new invader army
+	 * 
 	 */
 	private void buildInvaderArmy() {
 		addRow(InvaderType.Martian, 0);

@@ -36,6 +36,7 @@ public class Player implements Tile {
 	private static int totalScore = 0;
 	private static int highScore = 0;
 
+	// display data
 	private Font f;
 	private Point scorePosition = new Point(20, 20);
 	private Point levelPosition = new Point(getScreenDimension().width / 2, 20);
@@ -44,6 +45,7 @@ public class Player implements Tile {
 	private Point highScorePosition = new Point(
 			getScreenDimension().width - 200, 20);
 
+	// firing data
 	long lastPressed = System.currentTimeMillis();
 
 	public Player(SpriteManager spriteManager) {
@@ -78,6 +80,34 @@ public class Player implements Tile {
 		g.drawImage(player, x, y, scaledWidth, scaledHeight, null);
 	}
 
+	@Override
+	public Point getPosition() {
+		return new Point(x, y);
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, scaledWidth, scaledHeight);
+	}
+
+	// stub: see isAlive()
+	@Override
+	public boolean isActive() {
+		return false;
+	}
+
+	/**
+	 * The Player Tile has been hit
+	 */
+	@Override
+	public void destroy() {
+		lives -= 1;
+	}
+
+	/**
+	 * The player has started a new game. Saves the score (if a new high score)
+	 * before resetting.
+	 */
 	public static void restartGame() {
 		if (totalScore > highScore) {
 			highScore = totalScore;
@@ -101,16 +131,51 @@ public class Player implements Tile {
 		level += 1;
 	}
 
+	public static int getLevel() {
+		return level;
+	}
+
+	/**
+	 * Updates the number of player lives, starts at 3. Note: the displayed
+	 * value must never be negative.
+	 */
+	public static void losesOneLife() {
+		lives = lives > 0 ? lives -= 1 : 0;
+	}
+
+	/**
+	 * This method is used instead of Tile:isActive() so that other classes can
+	 * call a static function.
+	 * 
+	 * @return true = Player alive
+	 */
+	public static boolean isAlive() {
+		return lives > 0;
+	}
+
+	/**
+	 * User presses right key
+	 * 
+	 * @param right true = pressed
+	 * 
+	 */
 	public void setRight(boolean right) {
 		this.right = right;
 	}
 
+	/**
+	 * User presses left key
+	 * 
+	 * @param left true = pressed
+	 * 
+	 */
 	public void setLeft(boolean left) {
 		this.left = left;
 	}
 
 	/**
-	 * Called when user presses the fire key, i.e. space bar
+	 * Called when user presses the fire key (space bar) A minimum duration is
+	 * calculated to limit the fire rate.
 	 * 
 	 * @param fire
 	 *            true when fire pressed down
@@ -128,46 +193,11 @@ public class Player implements Tile {
 		}
 	}
 
-	@Override
-	public Point getPosition() {
-		return new Point(x, y);
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		return new Rectangle(x, y, scaledWidth, scaledHeight);
-	}
-	
-	public static int getLevel() {
-		return level;
-	}
-
-	// stub
-	@Override
-	public boolean isActive() {
-		return false;
-	}
-
 	/**
-	 * Updates the number of player lives, starts at 3. Note: the displayed
-	 * value must never be negative.
+	 * Draws the game info: Score, lives, level, high score
+	 * 
+	 * @param g
 	 */
-	public static void losesOneLife() {
-		lives = lives > 0 ? lives -= 1 : 0;
-	}
-
-	public static boolean isAlive() {
-		return lives > 0;
-	}
-
-	/**
-	 * The Player Tile has been hit
-	 */
-	@Override
-	public void destroy() {
-		lives -= 1;
-	}
-
 	private void updateScore(Graphics g) {
 		g.setFont(f);
 		g.setColor(Color.white);

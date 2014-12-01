@@ -49,6 +49,12 @@ public class Mercurian extends Invader implements Tile, Cloakable {
 		}
 	}
 
+	/**
+	 * Mercurian invaders can cloak
+	 * 
+	 * Uses a one-shot timer to cloak the invader at random intervals
+	 * 
+	 */
 	@Override
 	public void cloak() {
 

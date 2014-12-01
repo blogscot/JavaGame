@@ -9,7 +9,6 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.Timer;
@@ -23,7 +22,7 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- *         This abstract class is the base class for each Ship type: Destroyer
+ *         This the abstract base class for each Ship type: Destroyer
  *         and Mothership.
  *
  */
@@ -42,7 +41,7 @@ public abstract class Ship implements Tile, CanFire {
 
 	protected SpriteManager manager;
 
-	protected ArrayList<Missile> missiles = new ArrayList<>();
+	// firing data
 	private boolean fireTimerRunning = false;
 	private final int ShotRate = 8000;
 	protected Random r = new Random();
@@ -64,8 +63,8 @@ public abstract class Ship implements Tile, CanFire {
 		g.drawImage(ship, x, y, width, height, null);
 	}
 
-	public int getScore() {
-		return score;
+	public boolean isActive() {
+		return active;
 	}
 
 	/**
@@ -78,8 +77,41 @@ public abstract class Ship implements Tile, CanFire {
 		}
 	}
 
-	public boolean isActive() {
-		return active;
+	public Point getPosition() {
+		return new Point(x, y);
+	}
+
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, width, height);
+	}
+
+	/**
+	 * Generates missiles at random intervals defined by ShotRate
+	 * 
+	 */
+	@Override
+	public void fire() {
+	
+		if (!fireTimerRunning) {
+			fireTimerRunning = true;
+	
+			t = new Timer(r.nextInt(ShotRate), new ActionListener() {
+	
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					fireTimerRunning = false;
+					Game.getAliens().addEnemyMissile(
+							new Point(x + width / 2, y + height));
+				}
+			});
+	
+			t.setRepeats(false);
+			t.start();
+		}
+	}
+
+	public int getScore() {
+		return score;
 	}
 
 	/**
@@ -100,16 +132,8 @@ public abstract class Ship implements Tile, CanFire {
 		}
 	}
 
-	public Point getPosition() {
-		return new Point(x, y);
-	}
-
 	public int getWidth() {
 		return width;
-	}
-
-	public Rectangle getBounds() {
-		return new Rectangle(x, y, width, height);
 	}
 
 	/**
@@ -126,26 +150,5 @@ public abstract class Ship implements Tile, CanFire {
 		// Move to start position
 		x = p.x;
 		y = p.y;
-	}
-
-	@Override
-	public void fire() {
-
-		if (!fireTimerRunning) {
-			fireTimerRunning = true;
-
-			t = new Timer(r.nextInt(ShotRate), new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					fireTimerRunning = false;
-					Game.getAliens().addEnemyMissile(
-							new Point(x + width / 2, y + height));
-				}
-			});
-
-			t.setRepeats(false);
-			t.start();
-		}
 	}
 }

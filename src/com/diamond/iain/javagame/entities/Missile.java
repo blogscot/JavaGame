@@ -14,7 +14,7 @@ import com.diamond.iain.javagame.tiles.Tile;
  * 
  * @author Iain Diamond
  * 
- *         This abstract class is the base class for each Missile type:
+ *         This is the abstract base class for each Missile type:
  *         PlayerMissile and InvaderMissile.
  *
  */

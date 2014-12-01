@@ -44,6 +44,13 @@ public class Game extends Canvas implements Runnable {
 	private static int screenWidth = GameConstants.getScreenDimension().width;
 	private static int screenHeight = GameConstants.getScreenDimension().height;
 
+	/**
+	 * Game Initialisation
+	 * 
+	 * Loads the spritesheet, creates the Spritesheet manager, player and aliens
+	 * entities and sets up a keylistener class.
+	 * 
+	 */
 	public void init() {
 		ImageLoader loader = new ImageLoader();
 
@@ -63,6 +70,10 @@ public class Game extends Canvas implements Runnable {
 		this.addKeyListener(new KeyManager());
 	}
 
+	/**
+	 * Starts the game loop
+	 * 
+	 */
 	public synchronized void start() {
 		if (running)
 			return;
@@ -71,6 +82,10 @@ public class Game extends Canvas implements Runnable {
 		gameThread.start();
 	}
 
+	/**
+	 * Stops the game loop
+	 * 
+	 */
 	public synchronized void stop() {
 		if (!running)
 			return;
@@ -82,6 +97,10 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
+	/**
+	 * The main game loop
+	 * 
+	 */
 	@Override
 	public void run() {
 
@@ -103,11 +122,17 @@ public class Game extends Canvas implements Runnable {
 		stop();
 	}
 
+	/**
+	 * game ticks periodically
+	 */
 	private void tick() {
 		player.tick();
 		aliens.tick();
 	}
 
+	/**
+	 * game renders periodically
+	 */
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if (bs == null) {
@@ -128,6 +153,13 @@ public class Game extends Canvas implements Runnable {
 		bs.show();
 	}
 
+	/**
+	 * Space Invaders main
+	 * 
+	 * Draws the game frame and starts the game loop running
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		Game game = new Game();
@@ -143,15 +175,17 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
+	// allows all classes to check game state
 	public static boolean isGameOver() {
 		return Aliens.isGameOver();
 	}
 
-	// KeyManager updates Player and Aliens with key presses
+	// allows KeyManager to update Player with key presses
 	public static Player getPlayer() {
 		return player;
 	}
 
+	// allows KeyManager to update Aliens with key presses
 	public static Aliens getAliens() {
 		return aliens;
 	}

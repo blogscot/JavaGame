@@ -63,6 +63,12 @@ public class Destroyer extends Ship implements Tile, Cloakable, CanFire {
 		speed = SPEED;
 	}
 
+	/**
+	 * Destroyer ships can cloak
+	 * 
+	 * Uses a one-shot timer to cloak the ship at random intervals
+	 * 
+	 */
 	@Override
 	public void cloak() {
 

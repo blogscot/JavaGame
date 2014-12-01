@@ -40,6 +40,7 @@ public class KeyManager implements KeyListener {
 			aliens.restartGame(true);
 		}
 
+		// Pressing Escape exits game
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
 		}
