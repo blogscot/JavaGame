@@ -44,7 +44,7 @@ public abstract class Ship implements Tile, CanFire {
 
 	protected ArrayList<Missile> missiles = new ArrayList<>();
 	private boolean fireTimerRunning = false;
-	private final int ShotRate = 4000;
+	private final int ShotRate = 8000;
 	protected Random r = new Random();
 	Timer t;
 
@@ -83,14 +83,20 @@ public abstract class Ship implements Tile, CanFire {
 	}
 
 	/**
+	 * Sets the Ship's Active state. When the ship is set inactive the timer is
+	 * stopped otherwise the timer is started
 	 * 
-	 * @param flag true to start ship
-	 *             false when ship destroyed
+	 * @param flag
+	 *            true = start ship false = ship destroyed
 	 */
 	public void setActive(boolean flag) {
 		active = flag;
 		if (!active) {
 			t.stop();
+		} else {
+			if (t != null && !t.isRunning()) {
+				t.start();
+			}
 		}
 	}
 
@@ -107,17 +113,14 @@ public abstract class Ship implements Tile, CanFire {
 	}
 
 	/**
-	 * Resets the ship's position, direction and firing timers.
+	 * Resets the ship's position, direction and number of lives
 	 * 
 	 */
 	public void reset() {
-		if (t != null && !t.isRunning()) {
-			t.start();
-		}
 		lives = startLives;
 		active = false;
 
-		// Always start moving left to right
+		// Always start moving left to right (i.e. +ive value)
 		direction = 1;
 
 		// Move to start position
@@ -136,8 +139,6 @@ public abstract class Ship implements Tile, CanFire {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					fireTimerRunning = false;
-					// debug: if (!isActive())
-					// System.out.println("Ship firing @"+x+","+y);
 					Game.getAliens().addEnemyMissile(
 							new Point(x + width / 2, y + height));
 				}

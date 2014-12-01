@@ -130,6 +130,7 @@ public class Aliens {
 		// Is it Boss time?
 		if (isArmyDefeated()) {
 			if (!bossDefeated) {
+				if (!mothership.isActive())
 				mothership.setActive(true);
 			} else {
 				// Boss is Dead! Let's Level Up!
@@ -236,7 +237,12 @@ public class Aliens {
 		}
 	}
 
+	/**
+	 * Player and (all) enemies collection detection
+	 * 
+	 */
 	private void performCollisionDetection() {
+		
 		// Player missiles collision detection
 		playerMissiles.stream().forEach(
 				missile -> {
